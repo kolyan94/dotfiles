@@ -357,4 +357,4 @@ source <(fzf --zsh)
 
 # Tmuxifier config for zsh plugins  
 # eval "$(tmuxifier init -)"
-
+eval "$(flox activate -m run)"
