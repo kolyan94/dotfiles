@@ -238,6 +238,12 @@ if [[ -x "$(command -v bat)" ]]; then
     alias cat='bat'
 fi
 
+# Alias For tldr 
+if [[ -x "$(command -v tldr)" ]]; then
+    alias help='tldr'
+fi
+
+
 # Alias for lazygit
 # Link: https://github.com/jesseduffield/lazygit
 if [[ -x "$(command -v lazygit)" ]]; then
