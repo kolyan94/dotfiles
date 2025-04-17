@@ -117,7 +117,7 @@ bindkey "^[[B" history-beginning-search-forward   # search history with down key
 # History Configuration
 #######################################################
 
-HISTSIZE=10000
+HISTSIZE=20000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
@@ -209,6 +209,7 @@ if [[ -x "$(command -v nvim)" ]]; then
 	alias vim='nvim'
 	alias svi='sudo nvim'
 	alias vis='nvim "+set si"'
+	alias vif='nvim $(fzf)'
 elif [[ -x "$(command -v vim)" ]]; then
 	alias vi='vim'
 	alias svi='sudo vim'
@@ -359,8 +360,7 @@ source ~/.config/zsh/zsh-syntax-highlightin-tokyonight.zsh
 source <(fzf --zsh)
 
 # Zoxide config for zsh plugins 
-# eval "$(zoxide init --cmd cd zsh)"
-
+eval "$(zoxide init --cmd cd zsh)"
 
 # Tmuxifier config for zsh plugins  
 # eval "$(tmuxifier init -)"
