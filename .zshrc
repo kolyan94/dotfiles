@@ -1,3 +1,12 @@
+#
+#    ______          __     ____                 __  ______ 
+#   / ____/___  ____/ /__  / __ \____  _____    / / / / __ \
+#  / /   / __ \/ __  / _ \/ / / / __ \/ ___/   / /_/ / / / /
+# / /___/ /_/ / /_/ /  __/ /_/ / /_/ (__  )   / __  / /_/ / 
+# \____/\____/\__,_/\___/\____/ .___/____/   /_/ /_/\___\_\ 
+#                            /_/
+#
+#
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
