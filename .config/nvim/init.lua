@@ -669,6 +669,7 @@ require('lazy').setup({
           cmd = {
             'clangd',
             '--background-index',
+            '--query-driver=**',
             '-j=12',
           },
         },
