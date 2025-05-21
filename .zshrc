@@ -189,6 +189,8 @@ function y() {
 # (these directories are only added if they exist)
 pathprepend "$HOME/bin" "$HOME/sbin" "$HOME/.local/bin" "$HOME/local/bin" "$HOME/.bin"
 
+pathappend "$HOME/.local/share/swiftly/bin"
+
 # Check for the Rust package manager binary install location
 # Link: https://doc.rust-lang.org/cargo/index.html
 pathappend "$HOME/.cargo/bin"
