@@ -193,6 +193,8 @@ pathprepend "$HOME/bin" "$HOME/sbin" "$HOME/.local/bin" "$HOME/local/bin" "$HOME
 # Link: https://doc.rust-lang.org/cargo/index.html
 pathappend "$HOME/.cargo/bin"
 
+pathappend "/opt/homebrew/bin"
+
 # Add Tmuxifier to path
 pathappend "$HOME/.config/tmux/plugins/tmuxifier/bin"
 

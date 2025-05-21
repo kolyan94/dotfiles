@@ -656,6 +656,14 @@ require('lazy').setup({
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       require('lspconfig').sourcekit.setup {
+        capabilities = capabilities,
+        root_dir = function(filename, _)
+          local util = require 'lspconfig.util'
+          return util.root_pattern 'buildServer.json'(filename)
+            or util.root_pattern('*.xcodeproj', '*.xcworkspace')(filename)
+            or util.root_pattern '*.swift'(filename)
+            or util.root_pattern 'Package.swift'(filename)
+        end,
         filetypes = { 'swift', 'objc', 'objcpp' },
       }
       --  Add any additional override configuration in the following tables. Available keys are:
