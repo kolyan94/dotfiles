@@ -215,6 +215,7 @@ alias rmdir='rmdir -v'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias python='python3'
 
 # Alias for neovim
 if [[ -x "$(command -v nvim)" ]]; then
@@ -250,6 +251,12 @@ fi
 # Link: https://github.com/sharkdp/bat
 if [[ -x "$(command -v bat)" ]]; then
     alias cat='bat'
+fi
+
+# Alias For btop
+# Link: https://github.com/sharkdp/bat
+if [[ -x "$(command -v btop)" ]]; then
+    alias top='btop'
 fi
 
 # Alias For tldr 

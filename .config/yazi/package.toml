@@ -1,24 +1,24 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "b12a9ab"
-hash = "dd97eede8e20e59cd2604e8006e470e2"
+rev = "d7588f6"
+hash = "e1de3054c0d1a2d8dc6f007eadc0fa31"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "b12a9ab"
-hash = "1f3dad061209081a6b04dd6ff2cb06c7"
+rev = "d7588f6"
+hash = "3996fc74044bc44144b323686f887e1"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "b12a9ab"
-hash = "e0ada736ea676c2bbb3ec705a49526ef"
+rev = "d7588f6"
+hash = "63b6c222bf2103b3023389dde5e2ecfe"
 
 [[plugin.deps]]
 use = "pirafrank/what-size"
-rev = "f1c6b69"
-hash = "6e789212eb41d937bab04877ca361099"
+rev = "d896656"
+hash = "62251f94eb67648d42cdfcfb8be0fad2"
 
 [[flavor.deps]]
 use = "kalidyasin/yazi-flavors:tokyonight-night"
-rev = "92a09a6"
-hash = "845c5ee33e147b1a57f48728e42600ee"
+rev = "fa19b40"
+hash = "648270973268682226755084692d6dfc"
