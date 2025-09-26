@@ -7,13 +7,8 @@
 #                            /_/
 #
 #
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Initialize Starship prompt
 eval "$(flox activate -d "$HOME" -m run)"
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -27,8 +22,8 @@ fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Add in Powerlevel10k
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# Initialize Starship prompt (moved to end of file for proper loading)
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -55,8 +50,8 @@ autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# Initialize Starship prompt
+eval "$(starship init zsh)"
 
 #######################################################
 # ZSH Basic Options
@@ -74,6 +69,10 @@ setopt promptsubst         # enable command substitution in prompt
 #######################################################
 # Environment Variables
 #######################################################
+# Fix locale warnings
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 # export EDITOR=nvim
 # export VISUAL=nvim
 export EDITOR=nvim visudo
@@ -382,6 +381,8 @@ source <(fzf --zsh)
 # Zoxide config for zsh plugins 
 eval "$(zoxide init --cmd cd zsh)"
 
-# Tmuxifier config for zsh plugins  
+# Tmuxifier config for zsh plugins
 # eval "$(tmuxifier init -)"
 
+# Starship prompt configuration
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"

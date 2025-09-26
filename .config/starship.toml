@@ -1,0 +1,152 @@
+#
+#    ______          __     ____                 __  ______
+#   / ____/___  ____/ /__  / __ \____  _____    / / / / __ \
+#  / /   / __ \/ __  / _ \/ / / / __ \/ ___/   / /_/ / / / /
+# / /___/ /_/ / /_/ /  __/ /_/ / /_/ (__  )   / __  / /_/ /
+# \____/\____/\__,_/\___/\____/ .___/____/   /_/ /_/\___\_\
+#                            /_/
+#
+#
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+
+# Tokyo Night theme inspired format
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$git_metrics\
+$fill\
+$nodejs\
+$python\
+$rust\
+$swift\
+$c\
+$cmake\
+$docker_context\
+$package\
+$time\
+$line_break\
+$character"""
+
+[fill]
+symbol = " "
+
+[directory]
+style = "bold cyan"
+read_only = " 󰌾"
+truncation_length = 4
+truncate_to_repo = false
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+
+[git_branch]
+symbol = " "
+format = "[$symbol$branch]($style) "
+style = "bold yellow"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold yellow"
+conflicted = "="
+up_to_date = ""
+untracked = "?"
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+stashed = "$"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[git_metrics]
+format = "([+$added]($added_style) )([-$deleted]($deleted_style) )"
+added_style = "bold blue"
+deleted_style = "bold red"
+disabled = false
+
+[nodejs]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold green"
+
+[python]
+symbol = " "
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = "bold yellow"
+
+[rust]
+symbol = " "
+format = "[$symbol($version )]($style)"
+style = "bold red"
+
+[swift]
+symbol = "ﯣ "
+format = "[$symbol($version )]($style)"
+style = "bold orange"
+
+[c]
+symbol = " "
+format = "[$symbol($version(-$name) )]($style)"
+style = "149 bold"
+
+[cmake]
+format = "[$symbol($version )]($style)"
+
+[docker_context]
+symbol = " "
+format = "[$symbol$context]($style) "
+style = "blue bold"
+
+[package]
+symbol = "󰏗 "
+
+[time]
+disabled = false
+format = '🕙[\[ $time \]]($style) '
+time_format = "%T"
+style = "bright-white"
+
+[username]
+style_user = "bold dimmed blue"
+show_always = false
+
+[hostname]
+ssh_only = false
+format = '[$ssh_symbol](bold blue)[$hostname](bold red) '
+disabled = false
+
+# Language specific configurations
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[jobs]
+symbol = ""
+style = "bold red"
+number_threshold = 1
+format = "[$symbol$number]($style) "
