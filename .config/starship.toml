@@ -84,27 +84,22 @@ deleted_style = "bold red"
 disabled = false
 
 [nodejs]
-symbol = " "
 format = "[$symbol($version )]($style)"
 style = "bold green"
 
 [python]
-symbol = " "
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 style = "bold yellow"
 
 [rust]
-symbol = " "
 format = "[$symbol($version )]($style)"
 style = "bold red"
 
 [swift]
-symbol = "ﯣ "
 format = "[$symbol($version )]($style)"
 style = "bold orange"
 
 [c]
-symbol = " "
 format = "[$symbol($version(-$name) )]($style)"
 style = "149 bold"
 
@@ -112,15 +107,11 @@ style = "149 bold"
 format = "[$symbol($version )]($style)"
 
 [docker_context]
-symbol = " "
 format = "[$symbol$context]($style) "
 style = "blue bold"
 
-[package]
-symbol = "󰏗 "
-
 [time]
-disabled = false
+disabled = true
 format = '🕙[\[ $time \]]($style) '
 time_format = "%T"
 style = "bright-white"
@@ -130,23 +121,15 @@ style_user = "bold dimmed blue"
 show_always = false
 
 [hostname]
-ssh_only = false
+ssh_only = true
 format = '[$ssh_symbol](bold blue)[$hostname](bold red) '
 disabled = false
-
-# Language specific configurations
-[lua]
-symbol = " "
-
-[memory_usage]
-symbol = "󰍛 "
 
 [cmd_duration]
 format = "[$duration]($style) "
 style = "yellow"
 
 [jobs]
-symbol = ""
 style = "bold red"
 number_threshold = 1
 format = "[$symbol$number]($style) "

@@ -35,14 +35,13 @@ The main shell configuration is built around several key components:
    - Auto-installs if not present
 
 2. **Key Plugins Loaded**:
-   - romkatv/powerlevel10k (theme)
    - zsh-users/zsh-syntax-highlighting
    - zsh-users/zsh-completions
    - zsh-users/zsh-autosuggestions
    - Aloxaf/fzf-tab
    - jeffreytse/zsh-vi-mode
 
-3. **Powerlevel10k Configuration**: Uses `.p10k.zsh` for prompt customization
+3. **Starship Prompt**: Cross-shell prompt with configuration in `~/.config/starship.toml`
 
 ### Application Configurations
 
@@ -145,7 +144,7 @@ This repository contains configuration files only - no compilation or build step
 - `.config/nvim/lua/config/`: Core settings (options, keymaps, autocmds)
 - `.config/nvim/lua/plugins/`: Plugin configurations by category
 - `.config/lazygit/config.yml`: Git UI theme and settings
-- `.p10k.zsh`: Prompt appearance (run `p10k configure` to modify)
+- `~/.config/starship.toml`: Prompt appearance and configuration
 
 ### Neovim Configuration Structure
 ```

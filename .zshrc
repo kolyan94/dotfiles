@@ -23,7 +23,6 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # Initialize Starship prompt (moved to end of file for proper loading)
-# zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
