@@ -6,10 +6,10 @@
 # NOTE: In Git Bash, you can use something like "/c/Program\ Files/Notepad++/notepad++.exe"
 #######################################################
 
-export EDITOR=vim visudo
-export VISUAL=vim visudo
-export SUDO_EDITOR=vim
-export FCEDIT=vim
+export EDITOR=nvim visudo
+export VISUAL=nvim visudo
+export SUDO_EDITOR=nvim
+export FCEDIT=nvim
 
 # We will default to use either Neovim https://neovim.io or vim instead of vi
 # NOTE: vi is POSIX compliant but vim has more features and Neovim is more extensible
