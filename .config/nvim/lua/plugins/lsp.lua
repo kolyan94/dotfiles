@@ -10,7 +10,7 @@ return {
         'williamboman/mason.nvim',
         lazy = false, -- Don't lazy load Mason
         priority = 100, -- Load Mason early
-        opts = {}
+        opts = {},
       },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -56,7 +56,7 @@ return {
       })
 
       -- Configure diagnostics
-      vim.diagnostic.config({
+      vim.diagnostic.config {
         virtual_text = {
           prefix = '●',
           spacing = 4,
@@ -73,7 +73,7 @@ return {
           header = '',
           prefix = '',
         },
-      })
+      }
 
       -- LSP servers configuration
       local capabilities = require('blink.cmp').get_lsp_capabilities()
@@ -103,7 +103,7 @@ return {
         ts_ls = {},
 
         -- HTML/CSS
-        html = { filetypes = { 'html', 'twig', 'hbs'} },
+        html = { filetypes = { 'html', 'twig', 'hbs' } },
         cssls = {},
 
         -- JSON
@@ -122,10 +122,10 @@ return {
               completion = { callSnippet = 'Replace' },
               diagnostics = {
                 disable = { 'missing-fields' },
-                globals = { 'vim' }
+                globals = { 'vim' },
               },
               workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
+                library = vim.api.nvim_get_runtime_file('', true),
                 checkThirdParty = false,
               },
               telemetry = { enable = false },
@@ -137,7 +137,12 @@ return {
       -- Setup Mason tool installer
       local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
-        'stylua', 'swiftlint', 'black', 'isort', 'clang-format', 'prettier'
+        'stylua',
+        'swiftlint',
+        'black',
+        'isort',
+        'clang-format',
+        'prettier',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -156,9 +161,9 @@ return {
       vim.api.nvim_create_autocmd('FileType', {
         pattern = { 'swift', 'objc', 'objcpp' },
         callback = function(args)
-          vim.lsp.start({
+          vim.lsp.start {
             name = 'sourcekit-lsp',
-            cmd = { 'xcrun', 'sourcekit-lsp' },
+            cmd = { 'sourcekit-lsp' },
             root_dir = vim.fs.root(args.buf, {
               'Package.swift',
               '*.xcodeproj',
@@ -166,7 +171,7 @@ return {
               'buildServer.json',
             }) or vim.fn.getcwd(),
             capabilities = capabilities,
-          })
+          }
         end,
       })
     end,
@@ -196,18 +201,18 @@ return {
       keymap = { preset = 'default' },
       appearance = {
         use_nvim_cmp_as_default = true,
-        nerd_font_variant = 'mono'
+        nerd_font_variant = 'mono',
       },
       completion = {
         documentation = {
           auto_show = true,
-          auto_show_delay_ms = 200
+          auto_show_delay_ms = 200,
         },
         menu = {
           draw = {
-            treesitter = { "lsp" }
-          }
-        }
+            treesitter = { 'lsp' },
+          },
+        },
       },
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
@@ -256,3 +261,4 @@ return {
     },
   },
 }
+
