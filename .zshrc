@@ -1,12 +1,3 @@
-#
-#    ______          __     ____                 __  ______ 
-#   / ____/___  ____/ /__  / __ \____  _____    / / / / __ \
-#  / /   / __ \/ __  / _ \/ / / / __ \/ ___/   / /_/ / / / /
-# / /___/ /_/ / /_/ /  __/ /_/ / /_/ (__  )   / __  / /_/ / 
-# \____/\____/\__,_/\___/\____/ .___/____/   /_/ /_/\___\_\ 
-#                            /_/
-#
-#
 # Initialize Starship prompt
 eval "$(flox activate -d "$HOME" -m run)"
 
@@ -78,7 +69,7 @@ export EDITOR=nvim visudo
 export VISUAL=nvim visudo
 export SUDO_EDITOR=nvim
 export FCEDIT=nvim
-export TERMINAL=alacritty
+export TERMINAL=kitty
 export BROWSER=com.brave.Browser
 if [[ -x "$(command -v bat)" ]]; then
 	export MANPAGER="sh -c 'col -bx | bat -l man -p'"

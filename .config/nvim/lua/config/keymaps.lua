@@ -1,6 +1,15 @@
 -- Keymaps configuration
 -- See `:help vim.keymap.set()`
 
+-- Disable arrow keys to enforce vim navigation
+local modes = { 'n', 'i', 'v', 'x', 's', 'o', 'c' }
+for _, mode in ipairs(modes) do
+  vim.keymap.set(mode, '<Up>', '<Nop>', { desc = 'Disabled' })
+  vim.keymap.set(mode, '<Down>', '<Nop>', { desc = 'Disabled' })
+  vim.keymap.set(mode, '<Left>', '<Nop>', { desc = 'Disabled' })
+  vim.keymap.set(mode, '<Right>', '<Nop>', { desc = 'Disabled' })
+end
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
