@@ -142,15 +142,39 @@ return {
     vim.api.nvim_create_autocmd('FileType', {
       pattern = { 'swift', 'objc', 'objcpp' },
       callback = function(args)
+        local file_path = vim.api.nvim_buf_get_name(args.buf)
+
+        -- Search up directory tree for Xcode project
+        local function find_xcode_root(path)
+          local current = vim.fn.fnamemodify(path, ':h')
+          while current ~= '/' do
+            local xcodeproj = vim.fn.glob(current .. '/*.xcodeproj', false, true)
+            local xcworkspace = vim.fn.glob(current .. '/*.xcworkspace', false, true)
+            if #xcodeproj > 0 or #xcworkspace > 0 then
+              return current
+            end
+            current = vim.fn.fnamemodify(current, ':h')
+          end
+          return nil
+        end
+
+        local xcode_root = find_xcode_root(file_path)
+        local is_xcode_project = xcode_root ~= nil
+
+        -- Find root directory - prefer Xcode project root, then SPM, then fallback
+        local root_dir = xcode_root or vim.fs.root(args.buf, { 'Package.swift', 'buildServer.json' }) or vim.fn.getcwd()
+
+        -- Use Xcode's sourcekit-lsp for Xcode projects on macOS (handles iOS SDKs),
+        -- fall back to plain sourcekit-lsp for SPM projects and Linux
+        local cmd = { 'sourcekit-lsp' }
+        if vim.fn.has 'mac' == 1 and is_xcode_project and vim.fn.executable 'xcrun' == 1 then
+          cmd = { 'xcrun', 'sourcekit-lsp' }
+        end
+
         vim.lsp.start {
           name = 'sourcekit-lsp',
-          cmd = { 'sourcekit-lsp' },
-          root_dir = vim.fs.root(args.buf, {
-            'Package.swift',
-            '*.xcodeproj',
-            '*.xcworkspace',
-            'buildServer.json',
-          }) or vim.fn.getcwd(),
+          cmd = cmd,
+          root_dir = root_dir,
           capabilities = capabilities,
         }
       end,
