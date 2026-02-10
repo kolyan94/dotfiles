@@ -167,26 +167,27 @@ return {
     }
     dap.configurations.c = dap.configurations.cpp
 
-    -- Swift debugging
-    dap.adapters.lldb = {
-      type = 'executable',
-      command = '/usr/bin/lldb-vscode',
-      name = 'lldb',
-    }
-
-    dap.configurations.swift = {
-      {
-        name = 'Launch Swift',
-        type = 'lldb',
-        request = 'launch',
-        program = function()
-          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-        end,
-        cwd = '${workspaceFolder}',
-        stopOnEntry = false,
-        args = {},
-      },
-    }
+    -- Swift debugging (Linux only; on macOS xcodebuild.nvim handles this)
+    if vim.fn.has('mac') ~= 1 then
+      dap.adapters.lldb = {
+        type = 'executable',
+        command = '/usr/bin/lldb-vscode',
+        name = 'lldb',
+      }
+      dap.configurations.swift = {
+        {
+          name = 'Launch Swift',
+          type = 'lldb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+          args = {},
+        },
+      }
+    end
 
     -- Keymaps
     vim.keymap.set('n', '<F5>', function() dap.continue() end, { desc = 'Debug: Start/Continue' })

@@ -1,6 +1,57 @@
-# Initialize Starship prompt
-eval "$(flox activate -d "$HOME" -m run)"
+#######################################################
+# Add Common Binary Directories to Path
+#######################################################
 
+# Add directories to the end of the path if they exist and are not already in the path
+# Link: https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
+function pathappend() {
+    for ARG in "$@"
+    do
+        if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
+            PATH="${PATH:+"$PATH:"}$ARG"
+        fi
+    done
+}
+
+# Add directories to the beginning of the path if they exist and are not already in the path
+function pathprepend() {
+    for ARG in "$@"
+    do
+        if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
+            PATH="$ARG${PATH:+":$PATH"}"
+        fi
+    done
+}
+
+# y shell wrapper that provides the ability to change the current working directory when exiting Yazi.
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Add the most common personal binary paths located inside the home folder
+# (these directories are only added if they exist)
+pathprepend "$HOME/bin" "$HOME/sbin" "$HOME/.local/bin" "$HOME/local/bin" "$HOME/.bin"
+
+pathappend "$HOME/.local/share/swiftly/bin"
+
+# Check for the Rust package manager binary install location
+# Link: https://doc.rust-lang.org/cargo/index.html
+pathappend "$HOME/.cargo/bin"
+
+pathappend "$HOME/.npm-global/bin"
+pathappend "/opt/homebrew/bin"
+
+# Add Tmuxifier to path
+pathappend "$HOME/.config/tmux/plugins/tmuxifier/bin"
+
+eval "$(mise activate zsh)"
+# Initialize Starship prompt
+eval "$(starship init zsh)"
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -39,9 +90,6 @@ ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 autoload -Uz compinit && compinit
 
 zinit cdreplay -q
-
-# Initialize Starship prompt
-eval "$(starship init zsh)"
 
 #######################################################
 # ZSH Basic Options
@@ -138,56 +186,6 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
-
-#######################################################
-# Add Common Binary Directories to Path
-#######################################################
-
-# Add directories to the end of the path if they exist and are not already in the path
-# Link: https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
-function pathappend() {
-    for ARG in "$@"
-    do
-        if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
-            PATH="${PATH:+"$PATH:"}$ARG"
-        fi
-    done
-}
-
-# Add directories to the beginning of the path if they exist and are not already in the path
-function pathprepend() {
-    for ARG in "$@"
-    do
-        if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
-            PATH="$ARG${PATH:+":$PATH"}"
-        fi
-    done
-}
-
-# y shell wrapper that provides the ability to change the current working directory when exiting Yazi.
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
-
-# Add the most common personal binary paths located inside the home folder
-# (these directories are only added if they exist)
-pathprepend "$HOME/bin" "$HOME/sbin" "$HOME/.local/bin" "$HOME/local/bin" "$HOME/.bin"
-
-pathappend "$HOME/.local/share/swiftly/bin"
-
-# Check for the Rust package manager binary install location
-# Link: https://doc.rust-lang.org/cargo/index.html
-pathappend "$HOME/.cargo/bin"
-
-pathappend "/opt/homebrew/bin"
-
-# Add Tmuxifier to path
-pathappend "$HOME/.config/tmux/plugins/tmuxifier/bin"
 
 #######################################################
 # Aliases
