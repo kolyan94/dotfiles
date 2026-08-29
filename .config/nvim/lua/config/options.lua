@@ -23,8 +23,11 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+-- Use mouse
+vim.opt.mouse = 'a'
 -- Enable break indent
 vim.opt.breakindent = true
+vim.opt.linebreak = true
 
 -- Save undo history
 vim.opt.undofile = true
@@ -78,3 +81,4 @@ vim.opt.completeopt = 'menuone,noselect' -- Better completion experience
 
 -- Better startup time
 vim.loader.enable() -- Enable faster Lua module loading (Neovim 0.9+)
+

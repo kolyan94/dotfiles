@@ -1,24 +1,29 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "d7588f6"
-hash = "e1de3054c0d1a2d8dc6f007eadc0fa31"
+rev = "8cd50c6"
+hash = "e3260d0b1feded8c8e3ae3afa1169e30"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "d7588f6"
-hash = "3996fc74044bc44144b323686f887e1"
+rev = "8cd50c6"
+hash = "7b625412411be411153886894d9acaf"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "d7588f6"
-hash = "63b6c222bf2103b3023389dde5e2ecfe"
+rev = "8cd50c6"
+hash = "88e56a64b7ce7c4314427452343fef17"
 
 [[plugin.deps]]
 use = "pirafrank/what-size"
-rev = "d896656"
-hash = "62251f94eb67648d42cdfcfb8be0fad2"
+rev = "179ebf6"
+hash = "57056b9728006881d580ccabe8154a9c"
 
 [[flavor.deps]]
-use = "kalidyasin/yazi-flavors:tokyonight-night"
-rev = "fa19b40"
-hash = "648270973268682226755084692d6dfc"
+use = "ojas-bhagavath/tokyonight:tokyonight-moon"
+rev = "a375da8"
+hash = "547f06f641f926199bc7105a1cfbd742"
+
+[[flavor.deps]]
+use = "ojas-bhagavath/tokyonight:tokyonight-day"
+rev = "a375da8"
+hash = "ab0fa3d7b1519e76f08dfe9d98d9bf87"

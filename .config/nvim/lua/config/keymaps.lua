@@ -44,14 +44,18 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste without yanking' })
 
 -- Copy to system clipboard
-vim.keymap.set({'n', 'v'}, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank to system clipboard' })
 vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = 'Yank line to system clipboard' })
 
 -- Delete without yanking
-vim.keymap.set({'n', 'v'}, '<leader>d', [["_d]], { desc = 'Delete without yanking' })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = 'Delete without yanking' })
 
 -- Replace word under cursor
 vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace word under cursor' })
 
 -- Make file executable
 vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, desc = 'Make file executable' })
+
+-- Esc alternative
+vim.keymap.set('i', 'jk', '<Esc>')
+
