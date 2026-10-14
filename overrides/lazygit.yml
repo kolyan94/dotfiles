@@ -1,0 +1,30 @@
+# OPT-IN lazygit config, linked to ~/.config/lazygit/config.yml by `--with-overrides`.
+# Colors are ANSI names, not hex: they resolve through the terminal palette, so lazygit
+# follows whichever Omarchy theme is active. selectedLineBgColor / defaultFgColor are left
+# at lazygit's defaults for the same reason.
+gui:
+  nerdFontsVersion: "3"
+  branchColors:
+    'main': red
+    'master': red
+  theme:
+    activeBorderColor:
+      - yellow
+      - bold
+    inactiveBorderColor:
+      - cyan
+    searchingActiveBorderColor:
+      - yellow
+      - bold
+    optionsTextColor:
+      - blue
+    cherryPickedCommitFgColor:
+      - blue
+    cherryPickedCommitBgColor:
+      - magenta
+    markedBaseCommitFgColor:
+      - blue
+    markedBaseCommitBgColor:
+      - yellow
+    unstagedChangesColor:
+      - red
