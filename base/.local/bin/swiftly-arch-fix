@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Make swiftly's Ubuntu 26.04 Swift toolchains run on Arch/Omarchy. Safe to re-run.
+#
+# swiftly has no Arch build, so it is initialised with --platform ubuntu26.04. Those
+# binaries ask for Ubuntu's library names; Arch ships the same libraries under other
+# names (wide-char ncurses, libedit.so.0). This drops compat symlinks into each
+# toolchain's usr/lib/swift/linux, which is on the binaries' RUNPATH, so nothing
+# system-wide changes. Covers swift, swiftc, swift build and sourcekit-lsp. lldb and
+# lldb-dap stay broken: they need versioned ncurses symbols that Arch does not export.
+#
+# The `swiftly` wrapper in ~/.config/dotfiles/shell.bash runs this after install/update.
+set -euo pipefail
+
+toolchains=${SWIFTLY_TOOLCHAINS_DIR:-$HOME/.local/share/swiftly/toolchains}
+[[ -d $toolchains ]] || exit 0
+
+declare -A compat=(
+  [libncurses.so.6]=/usr/lib/libncursesw.so.6
+  [libform.so.6]=/usr/lib/libformw.so.6
+  [libpanel.so.6]=/usr/lib/libpanelw.so.6
+  [libedit.so.2]=/usr/lib/libedit.so.0
+)
+
+for dir in "$toolchains"/*/usr/lib/swift/linux; do
+  [[ -d $dir ]] || continue
+  for name in "${!compat[@]}"; do
+    [[ -e $dir/$name && ! -L $dir/$name ]] && continue # never touch a real file
+    ln -sfn "${compat[$name]}" "$dir/$name"
+  done
+done

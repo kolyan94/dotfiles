@@ -19,6 +19,7 @@ Rows marked **(opt-in)** exist only after `./install.sh --with-overrides`.
 | `<leader>sf` `s.` `s/` `sn` | Find files, recent, grep open buffers, nvim config |
 | `<leader><leader>` | Buffers |
 | `<leader>rn` | LSP rename |
+| `<leader>ir` `ib` `id` / `:XtoolNew` | iOS via xtool: build + run on iPhone, build, list devices / new project |
 
 ## Opt-in (`--with-overrides`)
 
@@ -62,7 +63,7 @@ snacks notifier; indent-blankline -> snacks indent; nvim-autopairs -> mini.pairs
 persistence, todo-comments, flash, gitsigns, conform, bufferline, lualine, which-key,
 blink.cmp, mason, treesitter -> LazyVim's own (tuned in `lua/plugins/`);
 toggleterm / lazygit.nvim -> snacks terminal / lazygit; nvim-spectre -> grug-far;
-xcodebuild.nvim -> removed (macOS only).
+xcodebuild.nvim -> removed (macOS only); `lua/plugins/xtool.lua` replaces it on Linux.
 
 ## Deliberately not carried over
 

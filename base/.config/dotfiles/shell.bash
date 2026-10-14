@@ -76,6 +76,15 @@ mkdirg() {
   command mkdir -p -- "$1" && builtin cd -- "$1"
 }
 
+# swiftly installs Ubuntu builds on Arch: re-link their libraries after a new toolchain lands
+if command -v swiftly &>/dev/null; then
+  swiftly() {
+    command swiftly "$@" || return
+    case $1 in install | update) command -v swiftly-arch-fix &>/dev/null && swiftly-arch-fix ;; esac
+    return 0
+  }
+fi
+
 # Random-height bars across the width of the screen
 random_bars() {
   local chars=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █) cols i out=""
