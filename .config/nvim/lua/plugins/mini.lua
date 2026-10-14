@@ -1,39 +1,36 @@
--- Enhanced text objects and surround
+-- Same plugin and mappings as LazyVim's coding.mini-surround extra, inlined because
+-- LazyVim refuses extras imported from lua/plugins/ (and enabling it through
+-- lazyvim.json would mean editing an Omarchy-owned file). gsa / gsd / gsr ...: the gs
+-- prefix leaves flash's `s` alone. mini.ai and mini.pairs are already in LazyVim core.
 return {
-  'echasnovski/mini.nvim',
-  config = function()
-    -- Better Around/Inside textobjects
-    require('mini.ai').setup {
-      n_lines = 500,
-      custom_textobjects = {
-        o = require('mini.ai').gen_spec.treesitter({
-          a = { '@block.outer', '@conditional.outer', '@loop.outer' },
-          i = { '@block.inner', '@conditional.inner', '@loop.inner' },
-        }, {}),
-        f = require('mini.ai').gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }, {}),
-        c = require('mini.ai').gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }, {}),
-        t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' },
-      },
-    }
-
-    -- Add/delete/replace surroundings (brackets, quotes, etc.)
-    require('mini.surround').setup()
-
-    -- Better code commenting
-    require('mini.comment').setup()
-
-    -- Move selections with Alt+j/k
-    require('mini.move').setup {
+  {
+    "nvim-mini/mini.surround",
+    keys = function(_, keys)
+      local opts = LazyVim.opts("mini.surround")
+      local mappings = {
+        { opts.mappings.add, desc = "Add Surrounding", mode = { "n", "x" } },
+        { opts.mappings.delete, desc = "Delete Surrounding" },
+        { opts.mappings.find, desc = "Find Right Surrounding" },
+        { opts.mappings.find_left, desc = "Find Left Surrounding" },
+        { opts.mappings.highlight, desc = "Highlight Surrounding" },
+        { opts.mappings.replace, desc = "Replace Surrounding" },
+        { opts.mappings.update_n_lines, desc = "Update `MiniSurround.config.n_lines`" },
+      }
+      mappings = vim.tbl_filter(function(m)
+        return m[1] and #m[1] > 0
+      end, mappings)
+      return vim.list_extend(mappings, keys)
+    end,
+    opts = {
       mappings = {
-        left = '<M-h>',
-        right = '<M-l>',
-        down = '<M-j>',
-        up = '<M-k>',
-        line_left = '<M-h>',
-        line_right = '<M-l>',
-        line_down = '<M-j>',
-        line_up = '<M-k>',
+        add = "gsa",
+        delete = "gsd",
+        find = "gsf",
+        find_left = "gsF",
+        highlight = "gsh",
+        replace = "gsr",
+        update_n_lines = "gsn",
       },
-    }
-  end,
+    },
+  },
 }

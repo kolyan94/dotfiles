@@ -1,187 +1,71 @@
-# Neovim Shortcuts Reference
+# Neovim shortcuts (Omarchy LazyVim + personal layer)
 
-This document contains all the key shortcuts for your optimized Neovim configuration, organized by functionality. **Bold shortcuts** are the most commonly used ones you should memorize first.
+One Neovim: Omarchy's LazyVim is the base and this repo adds a layer on top
+(`plugin/dotfiles.lua`, `lua/dotfiles/keymaps.lua`, extra specs in `lua/plugins/`).
+By default it only adds keys that are free; nothing LazyVim or Neovim already does is changed.
+Press `<space>` and wait: which-key lists everything, including LazyVim's own keys.
+Rows marked **(opt-in)** exist only after `./install.sh --with-overrides`.
 
-## 🚀 Essential Navigation
+## Added by default
 
-### Basic Movement
-- **`h/j/k/l`** - Basic movement (left/down/up/right)
-- **`w/b`** - Word forward/backward
-- **`0/^/$`** - Beginning of line/first non-blank/end of line
-- **`gg/G`** - Top/bottom of file
-- **`Ctrl+d/Ctrl+u`** - Page down/up (centered)
-- **`n/N`** - Next/previous search result (centered)
+| Key | Action |
+| --- | --- |
+| `<leader>p` (visual) | Paste without yanking |
+| `<leader>y` / `<leader>Y` | Yank to system clipboard |
+| `<leader>fo` / `:Oil` | Oil file explorer (float / parent directory) |
+| `gsa` `gsd` `gsr` ... | Surround (mini.surround) |
+| `F5` `F1` `F2` `F3` `F7` | Debug: continue, into, over, out, toggle UI |
+| `<leader>hs/hr/hp/hb/hd/...` | Git hunk actions (gitsigns). Jump between hunks with LazyVim's `]h` / `[h` |
+| `<leader>sf` `s.` `s/` `sn` | Find files, recent, grep open buffers, nvim config |
+| `<leader><leader>` | Buffers |
+| `<leader>rn` | LSP rename |
 
-### Lightning-Fast Navigation (Flash)
-- **`s + letters`** - Jump to any visible location instantly
-- `S` - Jump to treesitter nodes (functions, classes)
-- `r` - Remote flash (for operators)
-- `R` - Treesitter search
+## Opt-in (`--with-overrides`)
 
-### File & Buffer Management
-- **`<leader>sf`** - Search files
-- **`<leader>sg`** - Search by grep (live search)
-- **`<leader><leader>`** - Switch between buffers
-- **`Shift+h/Shift+l`** - Previous/next buffer
-- **`-`** - Open file explorer (Oil)
-- `<space>-` - Open floating file explorer
+| Key / behavior | What it does |
+| --- | --- |
+| `jk` (insert) | Escape |
+| `J` | Join lines, keep cursor |
+| `Ctrl-d` / `Ctrl-u`, `n` / `N` | Centered scrolling / search |
+| `J` / `K` (visual) | Move selection down / up |
+| `Alt-h/j/k/l` | Move line or selection (mini.move) |
+| `-` | Oil: open parent directory |
+| `gi` / `gt` | LSP implementation / type definition pickers |
+| `Ctrl-n` (+ `Ctrl-x`, `Ctrl-p`) | Multi-cursor (visual-multi) |
+| `zR` / `zM` | Open / close all folds (ufo) |
+| Arrow keys | Disabled (hardtime + keymap) |
+| options | relative numbers, format on save (not C/C++), scrolloff 10, no swap files, `inccommand=split` |
+| look | slanted bufferline, flat lualine + LSP name, `+ ~ _` gitsigns, markview, bqf, precognition |
+| formatters | isort/black, clang-format, stylua, prettier via conform |
 
-## 📝 Text Editing
+## Moved, because LazyVim uses the old key as a menu prefix
 
-### Essential Editing
-- **`i/a`** - Insert before/after cursor
-- **`I/A`** - Insert at beginning/end of line
-- **`o/O`** - Open new line below/above
-- **`x/X`** - Delete character under/before cursor
-- **`dd`** - Delete line
-- **`yy`** - Yank (copy) line
-- **`p/P`** - Paste after/before cursor
+| Was | Now | Why |
+| --- | --- | --- |
+| `<leader>d` delete without yanking | `<leader>D` | `<leader>d` is LazyVim's debug menu |
+| `<leader>s` replace word under cursor | `<leader>rw` | `<leader>s` is LazyVim's search menu |
+| `<leader>x` make file executable | `<leader>cx` | `<leader>x` is diagnostics/quickfix |
+| `<leader>f` format buffer | `<leader>cf` | `<leader>f` is LazyVim's file menu (`<leader>ff` would lag) |
+| `<leader>b` / `<leader>B` breakpoint | `<leader>db` / `<leader>dB` | `<leader>b` is the buffer menu |
+| `<leader>-` Oil float | `<leader>fo` | `<leader>-` is LazyVim's split below |
+| `<leader>q` diagnostic loclist | `<leader>xl` | `<leader>q` is quit/session |
+| `<leader>lg`, `Ctrl-\`, `<leader>gg` (toggleterm) | `<leader>gg` lazygit, `Ctrl-/` terminal | snacks replaces toggleterm and lazygit.nvim |
+| mini.surround `sa` `sd` `sr` | `gsa` `gsd` `gsr` | stock `s*` would shadow flash's `s` |
+| `<leader>sr` spectre, `<leader>sR` resume | `<leader>sr` grug-far replace, `<leader>sR` resume | grug-far replaces spectre |
+| `<leader>ds` / `<leader>ws` symbols | `<leader>ss` / `<leader>sS` | LazyVim symbol pickers |
+| `]c` / `[c` next/previous git change | `]h` / `[h` | `]c` / `[c` are LazyVim's next/previous class (treesitter textobjects) |
 
-### Advanced Editing
-- **`Ctrl+n`** - Multi-cursor: select word under cursor
-- `Ctrl+Shift+n` - Multi-cursor: select all occurrences
-- `Ctrl+x` - Multi-cursor: skip current selection
-- `Ctrl+p` - Multi-cursor: remove current selection
-- **`<leader>y`** - Copy to system clipboard
-- **`<leader>p`** - Paste without yanking (in visual mode)
-- `<leader>d` - Delete without yanking
+## Replaced by LazyVim equivalents (plugin removed)
 
-### Text Objects & Selection
-- **`af/if`** - Select around/inside function
-- **`ac/ic`** - Select around/inside class
-- `as/is` - Select around/inside scope
-- `]m/[m` - Next/previous function start
-- `]]/[[` - Next/previous class start
+Telescope -> snacks picker; alpha -> snacks dashboard; noice/notify -> LazyVim's noice +
+snacks notifier; indent-blankline -> snacks indent; nvim-autopairs -> mini.pairs;
+persistence, todo-comments, flash, gitsigns, conform, bufferline, lualine, which-key,
+blink.cmp, mason, treesitter -> LazyVim's own (tuned in `lua/plugins/`);
+toggleterm / lazygit.nvim -> snacks terminal / lazygit; nvim-spectre -> grug-far;
+xcodebuild.nvim -> removed (macOS only).
 
-### Movement & Manipulation
-- **`J`** - Join lines (keeping cursor position)
-- `Alt+j/Alt+k` - Move lines up/down (visual mode)
-- **`</>`** - Indent left/right (keeps selection in visual)
-- `<leader>s` - Replace word under cursor globally
+## Deliberately not carried over
 
-## 🔍 Search & Replace
-
-### Basic Search
-- **`/pattern`** - Search forward
-- **`?pattern`** - Search backward
-- **`*/#`** - Search word under cursor forward/backward
-- `<Esc>` - Clear search highlights
-
-### Advanced Search & Replace
-- **`<leader>sr`** - Open project-wide search & replace (Spectre)
-- `<leader>sw` - Search current word project-wide
-- `<leader>sf` - Search & replace in current file
-- **`<leader>sg`** - Live grep search
-- `<leader>s/` - Search in open files only
-
-## 🔧 Development Tools
-
-### LSP (Language Server)
-- **`gd`** - Go to definition
-- **`gr`** - Go to references
-- **`K`** - Show hover documentation
-- `<leader>ca` - Code actions
-- `<leader>rn` - Rename symbol
-- `[d/]d` - Previous/next diagnostic
-- **`<leader>q`** - Open diagnostic quickfix list
-
-### Debugging
-- **`F5`** - Start/continue debugging
-- **`F1`** - Step into
-- **`F2`** - Step over
-- **`F3`** - Step out
-- **`<leader>b`** - Toggle breakpoint
-- `<leader>B` - Set conditional breakpoint
-- `F7` - Toggle debug UI
-
-### Git Integration
-- **`<leader>lg`** - Open LazyGit
-- `]c/[c` - Next/previous git change
-- `<leader>hp` - Preview git hunk
-- `<leader>hs` - Stage git hunk
-- `<leader>hr` - Reset git hunk
-- `<leader>hb` - Show git blame
-
-## 🖥️ Terminal & Workflow
-
-### Terminal
-- **`Ctrl+\`** - Toggle floating terminal
-- `<Esc><Esc>` - Exit terminal mode
-- **`<leader>gg`** - Toggle LazyGit terminal
-- `<leader>tp` - Toggle Python REPL
-
-### Session Management
-- **`<leader>qs`** - Restore session
-- `<leader>ql` - Restore last session
-- `<leader>qd` - Don't save current session
-
-## 🎨 UI & Windows
-
-### Window Management
-- **`Ctrl+h/j/k/l`** - Navigate between windows
-- `Ctrl+w +/-` - Resize windows vertically
-- `Ctrl+w </>` - Resize windows horizontally
-- `Ctrl+w =` - Equalize window sizes
-
-### Folding
-- **`zR`** - Open all folds
-- **`zM`** - Close all folds
-- `za` - Toggle fold under cursor
-- `zo/zc` - Open/close fold under cursor
-
-### File Explorer (Oil)
-- **`-`** - Open parent directory
-- `<CR>` - Open file/directory
-- `g?` - Show help in Oil
-- `-` - Go up one directory level
-
-## 🔍 Telescope (Fuzzy Finder)
-
-### File Operations
-- **`<leader>sf`** - Find files
-- **`<leader>sg`** - Live grep (search in files)
-- `<leader>sr` - Resume last search
-- `<leader>s.` - Recent files
-- `<leader>sn` - Search Neovim config files
-
-### Code Navigation
-- `<leader>ss` - Search Telescope commands
-- `<leader>sk` - Search keymaps
-- `<leader>sh` - Search help
-- `<leader>sd` - Search diagnostics
-- **`<leader>/`** - Search in current buffer
-
-## 💡 Productivity Tips
-
-### Most Important Combos to Master:
-1. **`s + letters`** - Flash navigation (fastest way to move anywhere)
-2. **`<leader>sf → type → Enter`** - Open any file instantly
-3. **`<leader>sg → type`** - Find any text across your project
-4. **`Ctrl+n → edit → Esc`** - Multi-cursor editing
-5. **`gd`** - Jump to function/variable definition
-6. **`F5`** - Start debugging your code
-7. **`Ctrl+\`** - Quick terminal access
-8. **`<leader>lg`** - Git operations with LazyGit
-
-### Workflow Suggestions:
-- Use **Flash (`s`)** instead of arrow keys for navigation
-- Use **`<leader>sf`** instead of manual file browsing
-- Use **multi-cursor (`Ctrl+n`)** for repetitive edits
-- Use **`<leader>sg`** to find functions/variables across files
-- Use **debugging (`F5`)** instead of print statements
-- Use **system clipboard (`<leader>y`)** to copy between applications
-
-## 🎯 Quick Reference Card
-
-| Action | Shortcut | Action | Shortcut |
-|--------|----------|--------|----------|
-| **Jump anywhere** | `s + letters` | **Find files** | `<leader>sf` |
-| **Search in files** | `<leader>sg` | **Multi-cursor** | `Ctrl+n` |
-| **Go to definition** | `gd` | **Debug start** | `F5` |
-| **Toggle terminal** | `Ctrl+\` | **Git interface** | `<leader>lg` |
-| **Next buffer** | `Shift+l` | **File explorer** | `-` |
-| **Copy to clipboard** | `<leader>y` | **Search & replace** | `<leader>sr` |
-
----
-
-💡 **Pro Tip**: Start by mastering the **bold shortcuts** - they'll cover 80% of your daily workflow!
+`clipboard = "unnamedplus"` (would bypass Omarchy's OSC 52 clipboard), the
+`regexpengine=1` / `completeopt` tweaks, hardcoded solarized bufferline colors and the
+hardcoded lualine theme (both would ignore `omarchy theme set`).

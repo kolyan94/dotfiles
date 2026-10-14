@@ -1,21 +1,17 @@
--- File explorer
+-- Oil file explorer. Omarchy's LazyVim enables the neo-tree extra, which already
+-- handles `nvim .` (Omarchy's `n` alias), so oil must NOT hijack directory
+-- buffers: default_file_explorer is off and oil is opened explicitly (:Oil or
+-- <leader>fo). `-` (a Vim motion) is only mapped in the opt-in overrides.
 return {
-  'stevearc/oil.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  lazy = false,
-  config = function()
-    require('oil').setup {
-      default_file_explorer = true,
-      columns = { 'icon', 'permissions', 'size', 'mtime' },
-      delete_to_trash = true,
-      view_options = {
-        show_hidden = false,
-      },
-    }
-
-    vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-    vim.keymap.set('n', '<leader>-', function()
-      require('oil').toggle_float()
-    end, { desc = 'Open oil float' })
-  end,
+  "stevearc/oil.nvim",
+  cmd = "Oil",
+  keys = {
+    { "<leader>fo", function() require("oil").toggle_float() end, desc = "Oil (float)" },
+  },
+  opts = {
+    default_file_explorer = false,
+    columns = { "icon", "permissions", "size", "mtime" },
+    delete_to_trash = true,
+    view_options = { show_hidden = false },
+  },
 }
