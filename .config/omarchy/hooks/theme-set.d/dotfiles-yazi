@@ -1,0 +1,15 @@
+#!/bin/bash
+# Runs after every `omarchy theme set` / `omarchy theme refresh` (theme slug in $1).
+# Copies the yazi theme Omarchy rendered from ~/.config/omarchy/themed/yazi-theme.toml.tpl
+# into yazi's config dir. A copy, not a symlink: Omarchy replaces the whole
+# current/theme directory on every switch. If the theme renders none (no colors.toml),
+# the file is removed and yazi falls back to its built-in theme.
+src="$HOME/.local/state/omarchy/current/theme/yazi-theme.toml"
+dest="${XDG_CONFIG_HOME:-$HOME/.config}/yazi/theme.toml"
+
+if [[ -f $src ]]; then
+  mkdir -p "$(dirname "$dest")"
+  cp -f -- "$src" "$dest"
+else
+  rm -f -- "$dest"
+fi

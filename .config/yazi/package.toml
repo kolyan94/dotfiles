@@ -17,13 +17,3 @@ hash = "88e56a64b7ce7c4314427452343fef17"
 use = "pirafrank/what-size"
 rev = "179ebf6"
 hash = "57056b9728006881d580ccabe8154a9c"
-
-[[flavor.deps]]
-use = "ojas-bhagavath/tokyonight:tokyonight-moon"
-rev = "a375da8"
-hash = "547f06f641f926199bc7105a1cfbd742"
-
-[[flavor.deps]]
-use = "ojas-bhagavath/tokyonight:tokyonight-day"
-rev = "a375da8"
-hash = "ab0fa3d7b1519e76f08dfe9d98d9bf87"
