@@ -1,0 +1,11 @@
+# Layered on top of ~/.config/mise/config.toml (mise merges conf.d/*.toml).
+#
+# Only tools Omarchy does not already ship. Omarchy installs bat, fzf, lazygit,
+# neovim, starship, tmux, zoxide, ripgrep, fd, eza, docker, tree-sitter and lua
+# through pacman; installing them again here would shadow the pacman copies and
+# drift from `omarchy update`. `node` is pinned in the main config, so it is not
+# repeated. `lsd` is left out on purpose: Omarchy aliases ls to eza.
+[tools]
+rclone = "latest"
+tlrc = "latest"
+yazi = "latest"
