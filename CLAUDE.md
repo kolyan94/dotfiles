@@ -7,8 +7,9 @@ Guidance for Claude Code when working in this repository.
 The `omarchy` branch of a personal dotfiles repo, targeting an [Omarchy](https://omarchy.org) machine
 (Arch + Hyprland + zsh via omarchy-zsh, with bash still supported + kitty + tmux + LazyVim).
 **Omarchy is the base; this is an overlay.** By default it may only ADD (new commands, keys on unused
-keys, new plugins/tools). It must never replace or edit files Omarchy owns, and must not change any existing Omarchy/LazyVim/system default. Anything
-that does change a default goes in `overrides/`, applied only by `./install.sh --with-overrides`.
+keys, new plugins/tools). It must never replace or edit files Omarchy owns, and must not change any
+existing Omarchy/LazyVim/system default. Anything that does change a default goes in `overrides/`,
+applied only by `./install.sh --with-overrides`.
 `main` is the original macOS setup.
 
 ## Deploying

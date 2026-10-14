@@ -1,4 +1,4 @@
-# Personal shell layer, sourced from the END of ~/.bashrc (see install.sh).
+# Personal shell layer, sourced from the END of ~/.bashrc (see install.sh) and from ~/.zshrc.
 #
 # ADDITIVE ONLY. Omarchy owns the bash setup (aliases, zoxide, fzf, starship,
 # mise, history, inputrc); this file only adds NEW names and never changes how an
@@ -84,5 +84,6 @@ random_bars() {
   echo "$out"
 }
 
-# Opt-in layer that changes defaults (installed by `./install.sh --with-overrides`)
-[[ -r ~/.config/dotfiles/overrides.bash ]] && source ~/.config/dotfiles/overrides.bash
+# Opt-in layer that changes defaults (installed by `./install.sh --with-overrides`).
+# Bash only: it uses `bind` and readline settings, and zsh also sources this file.
+[[ -n ${BASH_VERSION:-} && -r ~/.config/dotfiles/overrides.bash ]] && source ~/.config/dotfiles/overrides.bash

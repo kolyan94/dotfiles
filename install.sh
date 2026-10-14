@@ -126,6 +126,7 @@ done < <(find "$HOME" -maxdepth 1 -xtype l -print0; find "$CONFIG" -xtype l -pri
 
 say "==> Stowing packages"
 stow_pkg base
+stow_pkg zsh
 case $OVERRIDES in
   on) stow_pkg overrides ;;
   off)
