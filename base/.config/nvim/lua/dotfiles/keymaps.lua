@@ -1,6 +1,6 @@
 -- Personal keymaps: ONLY keys that are free in Neovim and LazyVim. Anything that
 -- redefines an existing key (J, n/N, Ctrl-d/u, arrows, jk, ...) is in
--- overrides/nvim/lua/dotfiles/overrides/keymaps.lua (opt-in).
+-- overrides/.config/nvim/lua/dotfiles/overrides/keymaps.lua (opt-in).
 --
 -- <leader> + s d x f b q g c are LazyVim menu prefixes, so the old bindings that
 -- sat directly on them were moved (see SHORTCUTS.md).

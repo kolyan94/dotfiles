@@ -1,5 +1,2 @@
-# tmux plugins are cloned by install.sh / tpm
-.config/tmux/plugins/
-
 # lazy.nvim lockfile lives in ~/.config/nvim (Omarchy's), not in this overlay
 lazy-lock.json

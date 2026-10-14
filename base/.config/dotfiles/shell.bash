@@ -6,7 +6,7 @@
 #   - never redefine an Omarchy alias/function (c, t, a, d, r, h, n, g, ga, gd,
 #     ls, lt, ff, eff, cd, open, ...) or a system command (cp, rm, cat, ...)
 #   - never export EDITOR / BROWSER / TERMINAL / PAGER / LC_ALL
-# Anything that overrides a default lives in overrides/shell.bash (opt-in).
+# Anything that overrides a default lives in overrides/.config/dotfiles/overrides.bash (opt-in).
 
 [[ $- == *i* ]] || return 0
 
