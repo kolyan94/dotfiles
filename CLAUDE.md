@@ -1,183 +1,81 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
-## Repository Overview
+## What this is
 
-This is a personal dotfiles repository containing configuration files and shell scripts for optimizing a development environment. The repository uses **GNU Stow** as the primary tool for managing and deploying configuration files via symbolic links.
+The `omarchy` branch of a personal dotfiles repo, targeting an [Omarchy](https://omarchy.org) machine
+(Arch + Hyprland + bash + kitty + tmux + LazyVim). **Omarchy is the base; this is an overlay.** By
+default it may only ADD (new commands, keys on unused keys, new plugins/tools). It must never replace or
+edit files Omarchy owns, and must not change any existing Omarchy/LazyVim/system default. Anything
+that does change a default goes in `overrides/`, applied only by `./install.sh --with-overrides`.
+`main` is the original macOS/zsh setup.
 
-## Installation and Management
+## Deploying
 
-### Primary Installation Command
-```bash
-# Deploy all configuration files using Stow
-stow .
+`./install.sh` (`--dry-run` to preview, `--no-tools` to skip network steps, `--with-overrides` /
+`--without-overrides` to add or remove the opt-in layer). It symlinks repo files
+into `~/.config`, backing up anything it replaces to `~/.local/state/dotfiles/backup/`, and appends one
+marked block each to `~/.bashrc`, `kitty.conf` and `tmux.conf`. There is no stow, no zsh, no build step.
+Always run `--dry-run` first after changing the installer.
+
+## Rules for changes
+
+- **Additive vs override.** Ask: does this change how an existing key, option, command, alias, look or
+  plugin behaves? If yes it is an override: put it under `overrides/` and register it in
+  `link_overrides` in `install.sh`. If it only adds something new, it goes under `.config/`.
+
+- **Read Omarchy's side first.** Defaults live in `/usr/share/omarchy/` (read-only, never edit) and the
+  user-editable copies in `~/.config`. Check `default/bash/{aliases,functions}` before adding an alias or
+  function: Omarchy already uses `c t a d r h n g ga gd ls lt ff eff cd open`, among others.
+- **No hardcoded colors anywhere.** Every app must follow the active Omarchy theme. Use ANSI color
+  names (fzf, lazygit, starship), LazyVim's `auto` lualine theme, or, when an app needs real hex
+  values (yazi), an Omarchy template: `.config/omarchy/themed/<file>.tpl` uses `{{ accent }}`,
+  `{{ mix background accent 30% }}` etc. from the theme's `colors.toml`, is rendered on every
+  `omarchy theme set`, and a `hooks/theme-set.d/` script copies the result into the app's config.
+  Test a template against other themes with a throwaway `HOME` and `omarchy-theme-set-templates`,
+  never by switching the live theme. `omarchy theme refresh` re-renders without changing the wallpaper.
+- **Never export** `EDITOR`, `BROWSER`, `TERMINAL`, `PAGER`, `LC_ALL`, or set `clipboard=unnamedplus` in nvim.
+- **mise**: only tools Omarchy does not install through pacman, in `conf.d/dotfiles.toml`.
+- Files here are symlinked, so edit them in the repo, not under `~/.config`.
+
+## Layout
+
+```
+install.sh                         idempotent installer
+.config/                           ADDITIVE, always installed
+  dotfiles/shell.bash              new functions/aliases, sourced from the end of ~/.bashrc
+  kitty/dotfiles.conf              included by kitty.conf
+  tmux/dotfiles.conf               sourced by tmux.conf, declares tpm plugins
+  mise/conf.d/dotfiles.toml        extra mise tools
+  yazi/                            yazi config (Omarchy has none); theme.toml is generated, not stored
+  omarchy/backgrounds/tokyo-night/ user wallpapers for that theme slug
+  omarchy/themed/*.tpl             theme templates (yazi); hooks/theme-set.d/ copies the output into place
+  nvim/                            overlay on Omarchy's LazyVim (see below)
+overrides/                         OPT-IN, only with --with-overrides
+  shell.bash kitty.conf tmux.conf starship.toml lazygit.yml
+  nvim/                            mirrors ~/.config/nvim: dotfiles/overrides/*, plugin specs, ftplugin
 ```
 
-### Dependencies
-Core dependencies that must be installed before using this configuration:
-- Git
-- FZF (fuzzy finder)
-- GNU Stow (for managing dotfiles)
-- Zsh (shell)
+### Neovim overlay
 
-Optional dependencies mentioned in the configuration:
-- zoxide (smart directory navigation)
-- tmuxifier (tmux session management)
+Symlinked file by file into `~/.config/nvim`, so Omarchy's directory (and `lua/plugins/theme.lua`, a
+symlink Omarchy rewrites) stays untouched.
 
-## Configuration Architecture
+- `plugin/dotfiles.lua` loads `lua/dotfiles/keymaps.lua` on `VeryLazy` (after LazyVim registers its
+  own) and, only if present, `dotfiles.overrides.{options,keymaps,autocmds}`.
+- `lua/plugins/*.lua` here are standalone additions. A spec that tunes a LazyVim plugin's `opts`
+  (lists append, tables deep-merge) is an override, so it lives in `overrides/nvim/lua/plugins/`.
+- Default keymaps may only use keys that are free in Neovim and LazyVim. Redefining a builtin key
+  (`J`, `n`, `-`, `gi`, `gt`, arrows, ...) is an override.
+- Do not put a personal mapping on `<leader>` + `s d x f b q g c`: LazyVim uses those as menu prefixes.
+  See `SHORTCUTS.md` for the ones already relocated.
+- Do not `import` LazyVim extras from `lua/plugins/`: LazyVim rejects it. Inline the spec instead.
+- Style: double quotes, 2 spaces, 120 columns (matches Omarchy's `stylua.toml`).
 
-### Shell Configuration (.zshrc)
-The main shell configuration is built around several key components:
+### Verifying nvim changes without touching the live config
 
-1. **Zinit Plugin Manager**: Manages zsh plugins and themes
-   - Location: `${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git`
-   - Auto-installs if not present
-
-2. **Key Plugins Loaded**:
-   - zsh-users/zsh-syntax-highlighting
-   - zsh-users/zsh-completions
-   - zsh-users/zsh-autosuggestions
-   - Aloxaf/fzf-tab
-   - jeffreytse/zsh-vi-mode
-
-3. **Starship Prompt**: Cross-shell prompt with configuration in `~/.config/starship.toml`
-
-### Application Configurations
-
-#### Neovim (.config/nvim/)
-- **Architecture**: Based on Kickstart.nvim template
-- **Language**: Lua-based configuration
-- **Formatting**: Uses StyLua with configuration in `.config/nvim/.stylua.toml`
-- **Key Settings**: 160 column width, 2-space indents, single quotes preferred
-
-#### LazyGit (.config/lazygit/)
-- **Theme**: Tokyo Night color scheme
-- **Features**: Custom branch colors (main/master in red)
-
-#### Yazi File Manager (.config/yazi/)
-- **Configuration**: Multiple TOML files for different aspects
-- **Plugins**: Includes mount, what-size, full-border, and git plugins
-- **Theme**: Tokyo Night Night flavor
-
-### Shell Integration Functions
-
-#### Path Management
-- `pathappend()`: Safely adds directories to end of PATH
-- `pathprepend()`: Safely adds directories to beginning of PATH
-- Common paths: ~/.cargo/bin, /opt/homebrew/bin, ~/.local/bin
-
-#### Utility Functions
-- `y()`: Yazi wrapper that changes directory when exiting
-- `runfree()`: Starts programs detached from terminal
-- `cpp()`: File copy with progress bar using rsync
-- `cpg()`, `mvg()`: Copy/move and navigate to directory
-- `mkdirg()`: Create and navigate to directory
-
-## Environment Variables
-
-### Editor Configuration
-```bash
-export EDITOR=nvim
-export VISUAL=nvim
-export SUDO_EDITOR=nvim
-export FCEDIT=nvim
-```
-
-### Terminal Applications
-```bash
-export TERMINAL=alacritty
-export BROWSER=com.brave.Browser
-```
-
-### Tool-Specific Settings
-- **FZF**: Extensive theming with Tokyo Night colors
-- **Pager**: Uses bat when available
-- **Manual Pages**: Formatted with bat for syntax highlighting
-
-## Aliases and Commands
-
-### Common Aliases
-- Navigation: `..` for `cd ..`
-- Safety: `cp -iv`, `mv -iv`, `rm -iv` (interactive/verbose)
-- Modern replacements: `ls` → `lsd`, `cat` → `bat`, `top` → `btop`
-- Editor: `vi`/`vim` → `nvim`
-
-### Conditional Tool Aliases
-The configuration intelligently detects installed tools and creates aliases:
-- lsd for enhanced ls functionality
-- bat for syntax-highlighted file viewing
-- btop for system monitoring
-- lazygit (`lg` alias)
-- fzf with bat preview integration
-
-## Development Workflow
-
-### Tool Installation Requirements
-While most tools are auto-installed via Mason, some require manual installation:
-
-**Auto-installed by Mason** (no action needed):
-- LSP servers: `clangd`, `pylsp`, `lua_ls`
-- Formatters: `black`, `isort`, `clang-format`, `prettier`, `stylua`
-- Linter: `swiftlint`
-
-**Manual Installation Required**:
-```bash
-# Swift formatter (not available in Mason)
-brew install swiftformat
-
-# Enable Swift formatting in Neovim by uncommenting this line in init.lua:
-# swift = { 'swiftformat' },
-```
-
-### No Build Commands
-This repository contains configuration files only - no compilation or build steps are required.
-
-### Making Changes
-1. Edit configuration files directly in the repository
-2. Use `stow .` to deploy changes (creates/updates symlinks)
-3. Restart relevant applications or source shell configuration
-
-### Key Configuration Files to Modify
-- `.zshrc`: Main shell configuration
-- `.config/nvim/init.lua`: Main Neovim entry point (43 lines)
-- `.config/nvim/lua/config/`: Core settings (options, keymaps, autocmds)
-- `.config/nvim/lua/plugins/`: Plugin configurations by category
-- `.config/lazygit/config.yml`: Git UI theme and settings
-- `~/.config/starship.toml`: Prompt appearance and configuration
-
-### Neovim Configuration Structure
-```
-nvim/
-├── init.lua              # Main entry (43 lines)
-├── lua/
-│   ├── config/           # Core settings
-│   │   ├── options.lua   # All vim options
-│   │   ├── keymaps.lua   # Key mappings
-│   │   └── autocmds.lua  # Autocommands
-│   └── plugins/          # Plugin configurations
-│       ├── editor.lua    # Core editing (autopairs, surround, etc.)
-│       ├── ui.lua        # UI plugins (lualine, oil, colorscheme)
-│       ├── lsp.lua       # Language servers & completion
-│       ├── telescope.lua # Fuzzy finder
-│       ├── git.lua       # Git integration
-│       └── markdown.lua  # Markdown & documentation tools
-```
-
-## Shell Features
-
-### Vi Mode
-- Enabled with custom cursor styles for different modes
-- Insert mode: blinking beam cursor
-- Normal mode: blinking block cursor
-- Operator pending: blinking underline cursor
-
-### History Configuration
-- 20,000 command history
-- Duplicate removal and space-prefixed command ignoring
-- Shared history across sessions
-
-### FZF Integration
-- Directory preview with `ls --color`
-- File preview with bat syntax highlighting
-- Custom Tokyo Night theme colors
+Copy `~/.config/nvim` and `~/.local/share/nvim` into a scratch dir, symlink the overlay in, point
+`XDG_CONFIG_HOME` / `XDG_DATA_HOME` / `XDG_STATE_HOME` / `XDG_CACHE_HOME` at it, then run
+`nvim --headless "+Lazy! sync" +qa`. Headless has no UI, so `VeryLazy` never fires: trigger it with
+`vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy" })` before checking keymaps.
