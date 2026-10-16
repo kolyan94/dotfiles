@@ -9,3 +9,10 @@
 rclone = "latest"
 tlrc = "latest"
 yazi = "latest"
+
+# Embedded: Arduino CLI, and uv, which mise's pipx backend uses to install the
+# Python tools below into isolated venvs (no system pip, no python-pipx).
+arduino-cli = "latest"
+uv = "latest"
+"pipx:platformio" = "latest" # pio: ESP32 / Arduino / RP2040 builds, `pio device monitor`
+"pipx:esptool" = "latest"    # flash / erase / read ESP chips directly

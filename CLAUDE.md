@@ -34,7 +34,9 @@ after changing the installer, and test override on/off with a throwaway `HOME` (
   function: Omarchy already uses `c t a d r h n g ga gd ls lt ff eff cd open`, among others. The zsh
   side is `/usr/share/omarchy-zsh/shell/` (same names). `c=clear` in `zsh/.zshrc` is a deliberate exception.
 - **Shell layer runs in both shells.** `shell.bash` is sourced by bash and by zsh (`emulate sh`), so keep
-  it portable; bash-only things (`bind`, readline) belong in `overrides.bash`, which only bash loads.
+  it portable. Opt-in shell overrides follow the same split: `overrides.sh` (portable, loaded by both),
+  `overrides.bash` (`bind`, readline; sourced from `shell.bash`) and `overrides.zsh` (`bindkey`, zle;
+  sourced from `~/.zshrc`).
 - **No hardcoded colors anywhere.** Every app must follow the active Omarchy theme. Use ANSI color
   names (fzf, lazygit, starship), LazyVim's `auto` lualine theme, or, when an app needs real hex
   values (yazi), an Omarchy template: `base/.config/omarchy/themed/<file>.tpl` uses `{{ accent }}`,
@@ -62,7 +64,7 @@ base/.config/                      ADDITIVE, always stowed
   nvim/                            overlay on Omarchy's LazyVim (see below)
 zsh/                               .zshrc (omarchy-zsh + shell.bash), .zshenv (Omarchy env bootstrap)
 overrides/.config/                 OPT-IN, only with --with-overrides
-  dotfiles/overrides.bash kitty/dotfiles-overrides.conf tmux/dotfiles-overrides.conf
+  dotfiles/overrides.{sh,bash,zsh} kitty/dotfiles-overrides.conf tmux/dotfiles-overrides.conf
   starship.toml lazygit/config.yml
   nvim/                            mirrors ~/.config/nvim: dotfiles/overrides/*, plugin specs, ftplugin
 ```

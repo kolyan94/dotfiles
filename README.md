@@ -34,11 +34,11 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 
 | Path (in `base/`) | What it adds | How it hooks in |
 | --- | --- | --- |
-| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, aliases `q lg svi vis help iplocal ipexternal` | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
+| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi vis help iplocal ipexternal` | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
 | `.config/nvim/` | keys on free `<leader>` slots, extra LSP servers and parsers, oil, dap, obsidian, mini.surround (`gs*`), vim-be-good | per-file links into `~/.config/nvim` |
 | `.config/kitty/dotfiles.conf` | `ctrl+alt+enter` new window in same dir | `include` appended to `kitty.conf` |
 | `.config/tmux/dotfiles.conf` | tpm, floax (`prefix F`), sessionx (`prefix O`) | `source-file` appended to `tmux.conf` |
-| `.config/mise/conf.d/dotfiles.toml` | yazi, tlrc, rclone | mise merges `conf.d/` |
+| `.config/mise/conf.d/dotfiles.toml` | yazi, tlrc, rclone; embedded: arduino-cli, uv, PlatformIO (`pio`), esptool | mise merges `conf.d/` |
 | `.config/yazi/` | file manager config and plugins | per-file links (Omarchy has no yazi config) |
 | `.config/omarchy/themed/yazi-theme.toml.tpl` + `hooks/theme-set.d/dotfiles-yazi` | yazi colors that follow the active Omarchy theme | template Omarchy renders on every theme change; the hook copies the result to `~/.config/yazi/theme.toml` |
 | `.config/omarchy/backgrounds/tokyo-night/` | 31 wallpapers | `omarchy theme bg next` picks them up |
@@ -49,7 +49,7 @@ These change existing behavior or look, so they are off by default.
 
 | Path (in `overrides/.config/`) | What it changes |
 | --- | --- |
-| `dotfiles/overrides.bash` | (bash only) vi mode with cursor shapes, `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
+| `dotfiles/overrides.{sh,bash,zsh}` | vi mode with cursor shapes (`.bash` / `.zsh`); shared by both shells (`.sh`): `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
 | `kitty/dotfiles-overrides.conf` | beam cursor with trail, window padding |
 | `tmux/dotfiles-overrides.conf` | Shift-arrow / Alt-Shift-h,l window keys, cwd-preserving `"` and `%` splits |
 | `starship.toml` | replaces Omarchy's prompt |
@@ -92,6 +92,13 @@ See [`base/.config/nvim/SHORTCUTS.md`](base/.config/nvim/SHORTCUTS.md).
 - Yazi's code-preview highlighting uses its built-in syntax theme, not a Tokyo Night one.
 - To restore Omarchy's stock prompt after removing overrides: `omarchy refresh config starship.toml`.
 - Yazi previews want `7zip` and `chafa` (optional): `omarchy pkg add 7zip chafa`.
+- Embedded (`lua/plugins/embedded.lua`): `.ino` sketches get arduino-language-server, which needs
+  `arduino-cli config init`, a core (`arduino-cli core install arduino:avr` / `esp32:esp32`) and a
+  `sketch.yaml` (`arduino-cli board attach -b <fqbn> x.ino`). PlatformIO projects use clangd after
+  `pio run -t compiledb`. Serial ports need `sudo usermod -aG uucp $USER` (then log out and in).
+- Playdate: `yay -S playdate-sdk`, then `:PlaydateLuarc` in a project writes `.luarc.json` for lua_ls,
+  and `:PlaydateRun` / `pdrun` build `source/` and open the simulator. API types: clone
+  [playdate-luacats](https://github.com/notpeter/playdate-luacats) to `~/.local/share/playdate-luacats`.
 - The Obsidian vault path in `lua/plugins/obsidian.lua` is `~/Documents/Obsidian/Zettel`.
 
 ## License

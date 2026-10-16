@@ -28,6 +28,9 @@ unset -f _dots_path
 alias q='exit'
 alias svi='sudo nvim'
 alias vis='nvim "+set si"'
+# Arch ships no vi/vim here; fill the gap with nvim (a real vi/vim, if installed later, wins)
+command -v vi &>/dev/null || alias vi='nvim'
+command -v vim &>/dev/null || alias vim='nvim'
 command -v lazygit &>/dev/null && alias lg='lazygit'
 command -v tldr &>/dev/null && alias help='tldr'
 alias iplocal='ip -br -c a'
@@ -85,6 +88,39 @@ if command -v swiftly &>/dev/null; then
   }
 fi
 
+#######################################################
+# Embedded (ESP32 / Arduino / Pico / Playdate)
+#######################################################
+
+# Serial monitor: serial [port] [baud]. With no port, picks from /dev/ttyUSB* /dev/ttyACM*
+# (fzf when there are several). Uses tio if installed, else PlatformIO's monitor.
+serial() {
+  local port=$1 baud=${2:-115200} p ports=""
+  if [[ -z $port ]]; then
+    for p in /dev/ttyUSB* /dev/ttyACM*; do [[ -e $p ]] && ports+="$p"$'\n'; done
+    [[ -z $ports ]] && { echo "serial: no /dev/ttyUSB* or /dev/ttyACM* device" >&2; return 1; }
+    port=$(printf '%s' "$ports" | fzf --select-1 --prompt="port> ") || return
+  fi
+  [[ -r $port && -w $port ]] || echo "serial: no access to $port (add yourself to uucp, then log out and back in)" >&2
+  if command -v tio &>/dev/null; then
+    tio -b "$baud" "$port"
+  else
+    pio device monitor -p "$port" -b "$baud"
+  fi
+}
+
+# Playdate SDK: the AUR package exports this from /etc/profile.d, which only login shells read
+if [[ -z ${PLAYDATE_SDK_PATH:-} && -d ${XDG_DATA_HOME:-$HOME/.local/share}/playdate-sdk ]]; then
+  export PLAYDATE_SDK_PATH="${XDG_DATA_HOME:-$HOME/.local/share}/playdate-sdk"
+fi
+
+# Build a Playdate Lua project (source/ -> <dir name>.pdx) and open it in the simulator
+pdrun() {
+  local dir=${1:-.} name
+  name=$(basename -- "$(cd -- "$dir" && pwd)")
+  pdc -- "$dir/source" "$dir/$name.pdx" && runfree PlaydateSimulator "$dir/$name.pdx"
+}
+
 # Random-height bars across the width of the screen
 random_bars() {
   local chars=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █) cols i out=""
@@ -94,5 +130,5 @@ random_bars() {
 }
 
 # Opt-in layer that changes defaults (installed by `./install.sh --with-overrides`).
-# Bash only: it uses `bind` and readline settings, and zsh also sources this file.
+# Bash only: it uses `bind` and readline settings. zsh loads overrides.zsh from ~/.zshrc instead.
 [[ -n ${BASH_VERSION:-} && -r ~/.config/dotfiles/overrides.bash ]] && source ~/.config/dotfiles/overrides.bash

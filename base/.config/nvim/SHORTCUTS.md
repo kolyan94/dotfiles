@@ -20,6 +20,7 @@ Rows marked **(opt-in)** exist only after `./install.sh --with-overrides`.
 | `<leader><leader>` | Buffers |
 | `<leader>rn` | LSP rename |
 | `<leader>ir` `ib` `id` / `:XtoolNew` | iOS via xtool: build + run on iPhone, build, list devices / new project |
+| `:PlaydateRun` / `:PlaydateLuarc` | Playdate: build + open simulator / write `.luarc.json` for lua_ls |
 
 ## Opt-in (`--with-overrides`)
 
