@@ -10,7 +10,8 @@ mirrors `$HOME`, and `./install.sh` stows the ones for the machine it runs on.
 | `common-overrides/` | identical everywhere, but on Omarchy it changes a default (starship prompt, hardtime, bqf, precognition, vim-sleuth, visual-multi, json ftplugin) | always | `--with-overrides` |
 | `macos/` | the macOS setup: zinit `.zshrc`, kitty, tmux, mise, standalone (kickstart-style) Neovim with xcodebuild, yazi theme and plugins | always | - |
 | `omarchy/` | the Omarchy overlay: additive shell layer, zsh via omarchy-zsh, LazyVim overlay, theme templates | - | always |
-| `omarchy-overrides/` | Omarchy opt-in layer: vi mode and safety aliases, kitty/tmux tweaks, LazyVim look and behavior | - | `--with-overrides` |
+| `shell-overrides/` | Omarchy opt-in shell layer: vi mode, `cp -i`/`rm -i`, `cat`->bat, `top`->btop, `vi`->nvim, fzf look | - | `--with-shell-overrides` or `--with-overrides` |
+| `omarchy-overrides/` | Omarchy opt-in layer: kitty/tmux tweaks, lazygit, LazyVim look and behavior | - | `--with-overrides` |
 
 A change to a `common*` file reaches every machine on the next `git pull` (the links point into the
 repo), with no branch merges. Put a file in `common/` only when it is the same on both systems.
@@ -21,8 +22,9 @@ brew install stow                 sudo pacman -S stow omarchy-zsh
 git clone https://github.com/kolyan94/dotfiles && cd dotfiles
 ./install.sh --dry-run            # preview
 ./install.sh                      # stow this machine's packages
-./install.sh --with-overrides     # Omarchy only: also the opt-in layer
-./install.sh --without-overrides  # Omarchy only: take it out again
+./install.sh --with-shell-overrides  # Omarchy only: opt-in shell aliases + vi mode
+./install.sh --with-overrides     # Omarchy only: every opt-in layer (shell, prompt, nvim, ...)
+./install.sh --without-overrides  # Omarchy only: take them out again (--without-shell-overrides: shell only)
 ```
 
 Stow runs with `--no-folding`, so every file is its own symlink and directories such as
@@ -40,7 +42,7 @@ root `.stow-local-ignore` makes a stray `stow .` a no-op.
 **Omarchy stays the base.** By default the Omarchy packages only *add* things: new commands, keys on
 unused keys, new plugins and tools. They change no Omarchy or LazyVim default, and edit no file
 Omarchy owns, so `omarchy update` and `omarchy theme set` keep working. Anything that would
-override a default lives in `common-overrides/` or `omarchy-overrides/` and is applied only when you
+override a default lives in `common-overrides/`, `shell-overrides/` or `omarchy-overrides/` and is applied only when you
 ask for it. To make zsh the login shell: `chsh -s /usr/bin/zsh`, then reboot (logging out keeps the
 old `$SHELL` in the systemd user session).
 
@@ -56,7 +58,7 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 
 | Path (in `omarchy/`, or `common/` for yazi and vim-be-good) | What it adds | How it hooks in |
 | --- | --- | --- |
-| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi vis help iplocal ipexternal` | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
+| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi vis vif help iplocal ipexternal ll tree pdf`, `preview` (fzf a file, open it) | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
 | `.config/nvim/` | keys on free `<leader>` slots, extra LSP servers and parsers, oil, dap, obsidian, mini.surround (`gs*`), vim-be-good | per-file links into `~/.config/nvim` |
 | `.config/kitty/dotfiles.conf` | `ctrl+alt+enter` new window in same dir | `include` appended to `kitty.conf` |
 | `.config/tmux/dotfiles.conf` | tpm, floax (`prefix F`), sessionx (`prefix O`) | `source-file` appended to `tmux.conf` |
@@ -67,9 +69,10 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 
 ## Opt-in overrides (`--with-overrides`)
 
-These change existing behavior or look, so they are off by default.
+These change existing behavior or look, so they are off by default. `--with-shell-overrides` takes
+only the shell row, without the prompt, terminal and Neovim changes.
 
-| Path (in `omarchy-overrides/.config/`; starship, hardtime, bqf, precognition, vim-sleuth, visual-multi and the json ftplugin are in `common-overrides/`) | What it changes |
+| Path (in `omarchy-overrides/.config/`; the shell files are in `shell-overrides/`; starship, hardtime, bqf, precognition, vim-sleuth, visual-multi and the json ftplugin are in `common-overrides/`) | What it changes |
 | --- | --- |
 | `dotfiles/overrides.{sh,bash,zsh}` | vi mode with cursor shapes (`.bash` / `.zsh`); shared by both shells (`.sh`): `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
 | `kitty/dotfiles-overrides.conf` | beam cursor with trail, window padding |

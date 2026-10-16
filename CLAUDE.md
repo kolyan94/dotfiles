@@ -9,22 +9,24 @@ One branch of personal dotfiles for two kinds of machines, deployed with GNU Sto
 - **macOS** (`common/` + `common-overrides/` + `macos/`): the original setup. zsh with zinit, kitty,
   tmux, Homebrew/mise, a standalone kickstart-style Neovim (single quotes, 160 columns). Its own
   colors (Tokyo Night hex) are fine there.
-- **Omarchy** (`common/` + `omarchy/`, plus `common-overrides/` + `omarchy-overrides/` with
-  `--with-overrides`): Arch + Hyprland + zsh via omarchy-zsh (bash still supported) + kitty + tmux +
+- **Omarchy** (`common/` + `omarchy/`, plus `shell-overrides/` with `--with-shell-overrides`, or that
+  and `common-overrides/` + `omarchy-overrides/` with `--with-overrides`): Arch + Hyprland + zsh via omarchy-zsh (bash still supported) + kitty + tmux +
   LazyVim. **Omarchy is the base; this is an overlay.** By default it may only ADD. It must never
   replace or edit files Omarchy owns, and must not change any existing Omarchy/LazyVim/system default.
 
 Where a change goes:
 - Same file, same behavior on both systems → `common/`. If on Omarchy it would change a default →
   `common-overrides/` (always on for macOS, opt-in on Omarchy). Edit these knowing both systems load them.
-- Only macOS → `macos/`. Only Omarchy → `omarchy/` (additive) or `omarchy-overrides/` (changes a default).
+- Only macOS → `macos/`. Only Omarchy → `omarchy/` (additive) or `omarchy-overrides/` (changes a default; shell aliases and
+  key bindings that change a default go in `shell-overrides/`).
 - Never keep two copies of one path in packages that are stowed together (stow would conflict):
   `common*` must not share a path with `macos/` or `omarchy*`.
 
 ## Deploying
 
 `./install.sh` (`--dry-run` to preview, `--no-tools` to skip network steps, `--os macos|omarchy` to
-force the platform, `--with-overrides` / `--without-overrides` for the Omarchy opt-in layer). Packages
+force the platform, `--with-overrides` / `--without-overrides` for the Omarchy opt-in layers, `--with-shell-overrides` /
+`--without-shell-overrides` for just the shell one). Packages
 are stowed with `--no-folding --restow`, so every file is its own relative symlink and app directories
 stay real. Before stowing it drops links into the repo that no package owns (older layouts: macOS
 `stow .` with folded dirs, Omarchy's old `base/ zsh/ overrides/`), and moves anything else in the way
@@ -45,7 +47,7 @@ inside it, or backups land in the real one): `--os macos` works on Linux too.
   function: Omarchy already uses `c t a d r h n g ga gd ls lt ff eff cd open`, among others. The zsh
   side is `/usr/share/omarchy-zsh/shell/` (same names). `c=clear` in `omarchy/.zshrc` is a deliberate exception.
 - **Shell layer runs in both shells.** `shell.bash` is sourced by bash and by zsh (`emulate sh`), so keep
-  it portable. Opt-in shell overrides follow the same split: `overrides.sh` (portable, loaded by both),
+  it portable. Opt-in shell overrides (`shell-overrides/`) follow the same split: `overrides.sh` (portable, loaded by both),
   `overrides.bash` (`bind`, readline; sourced from `shell.bash`) and `overrides.zsh` (`bindkey`, zle;
   sourced from `~/.zshrc`).
 - **No hardcoded colors anywhere.** Every app must follow the active Omarchy theme. Use ANSI color
@@ -79,8 +81,9 @@ omarchy/                           .zshrc (omarchy-zsh + shell.bash), .zshenv, .
   omarchy/backgrounds/tokyo-night/ user wallpapers for that theme slug
   omarchy/themed/*.tpl             theme templates (yazi); hooks/theme-set.d/ copies the output into place
   nvim/                            overlay on Omarchy's LazyVim (see below)
+shell-overrides/.config/dotfiles/  Omarchy OPT-IN shell: overrides.{sh,bash,zsh} (--with-shell-overrides or --with-overrides)
 omarchy-overrides/.config/         Omarchy OPT-IN, only with --with-overrides
-  dotfiles/overrides.{sh,bash,zsh} kitty/dotfiles-overrides.conf tmux/dotfiles-overrides.conf
+  kitty/dotfiles-overrides.conf tmux/dotfiles-overrides.conf
   lazygit/config.yml
   nvim/                            mirrors ~/.config/nvim: dotfiles/overrides/*, plugin specs
 ```
