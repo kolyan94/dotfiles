@@ -1,4 +1,4 @@
-# OPT-IN zsh overrides, the zsh twin of overrides.bash. Linked by `./install.sh --with-overrides`
+# OPT-IN zsh overrides, the zsh twin of overrides.bash. Linked by `./install.sh --with-shell-overrides`
 # and sourced at the end of ~/.zshrc, after omarchy-zsh. Interactive shells only.
 
 [[ -o interactive ]] || return 0

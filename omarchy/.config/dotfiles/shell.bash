@@ -6,7 +6,7 @@
 #   - never redefine an Omarchy alias/function (c, t, a, d, r, h, n, g, ga, gd,
 #     ls, lt, ff, eff, cd, open, ...) or a system command (cp, rm, cat, ...)
 #   - never export EDITOR / BROWSER / TERMINAL / PAGER / LC_ALL
-# Anything that overrides a default lives in omarchy-overrides/.config/dotfiles/overrides.bash (opt-in).
+# Anything that overrides a default lives in shell-overrides/.config/dotfiles/overrides.{sh,bash,zsh} (opt-in).
 
 [[ $- == *i* ]] || return 0
 
@@ -35,6 +35,18 @@ command -v lazygit &>/dev/null && alias lg='lazygit'
 command -v tldr &>/dev/null && alias help='tldr'
 alias iplocal='ip -br -c a'
 alias ipexternal='curl -s ifconfig.me && echo'
+# From the macOS setup (lsd there; eza is what Omarchy ships). Omarchy has ls/lsa/lt/lta, not ll.
+command -v eza &>/dev/null && alias ll='eza -lah --header --group-directories-first --icons=auto'
+command -v tree &>/dev/null || { command -v eza &>/dev/null && alias tree='eza --tree --icons=auto'; }
+command -v evince &>/dev/null && alias pdf='runfree evince'
+alias vif='nvim "$(fzf)"'
+
+# Fuzzy-pick a file (with preview) and open it in its default app
+preview() {
+  local f
+  f=$(fzf --info=inline --query="$*" --preview 'bat --style=numbers --color=always --line-range :500 {}') || return
+  runfree xdg-open "$f"
+}
 
 #######################################################
 # New functions
@@ -129,6 +141,6 @@ random_bars() {
   echo "$out"
 }
 
-# Opt-in layer that changes defaults (installed by `./install.sh --with-overrides`).
+# Opt-in layer that changes defaults (installed by `./install.sh --with-shell-overrides`).
 # Bash only: it uses `bind` and readline settings. zsh loads overrides.zsh from ~/.zshrc instead.
 [[ -n ${BASH_VERSION:-} && -r ~/.config/dotfiles/overrides.bash ]] && source ~/.config/dotfiles/overrides.bash

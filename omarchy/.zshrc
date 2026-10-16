@@ -17,5 +17,5 @@
 # Personal choice over Omarchy's c='opencode'
 alias c='clear'
 
-# Opt-in layer that changes defaults (installed by `./install.sh --with-overrides`)
+# Opt-in layer that changes defaults (installed by `./install.sh --with-shell-overrides`)
 [[ -r ~/.config/dotfiles/overrides.zsh ]] && source ~/.config/dotfiles/overrides.zsh

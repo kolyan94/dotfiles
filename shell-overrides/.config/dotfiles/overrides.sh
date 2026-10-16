@@ -1,5 +1,5 @@
 # OPT-IN shell overrides shared by bash and zsh: aliases that change system commands and the fzf
-# look. Linked by `./install.sh --with-overrides`, sourced by overrides.bash and overrides.zsh.
+# look. Linked by `./install.sh --with-shell-overrides` (or --with-overrides), sourced by overrides.bash and overrides.zsh.
 # Keep it portable (no `bind`, no `bindkey`).
 
 [[ $- == *i* ]] || return 0

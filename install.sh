@@ -4,9 +4,11 @@
 #   ./install.sh                    stow the packages for this OS:
 #                                     macOS:   common + common-overrides + macos
 #                                     Omarchy: common + omarchy (ADDITIVE: changes no Omarchy default)
-#   ./install.sh --with-overrides   Omarchy: also stow common-overrides + omarchy-overrides
-#                                   (vi mode, safety aliases, starship prompt, nvim behavior, ...)
-#   ./install.sh --without-overrides   Omarchy: unstow them again
+#   ./install.sh --with-shell-overrides   Omarchy: also stow shell-overrides only (vi mode,
+#                                   cp -i/rm -i, cat->bat, top->btop, vi->nvim, fzf look)
+#   ./install.sh --with-overrides   Omarchy: everything opt-in: shell-overrides + common-overrides
+#                                   + omarchy-overrides (starship prompt, nvim behavior, kitty, tmux, ...)
+#   ./install.sh --without-overrides | --without-shell-overrides   Omarchy: unstow them again
 #   ./install.sh --dry-run          print what would change, touch nothing
 #   ./install.sh --no-tools         skip mise / tpm / Neovim plugin sync (no network)
 #   ./install.sh --os macos|omarchy force the platform (testing)
@@ -22,15 +24,18 @@ set -euo pipefail
 DRY=0
 TOOLS=1
 OVERRIDES=keep # keep | on | off
+SHELL_OVERRIDES=keep
 OS=""
 while (($#)); do
   case $1 in
     --dry-run) DRY=1 ;;
     --no-tools) TOOLS=0 ;;
-    --with-overrides) OVERRIDES=on ;;
-    --without-overrides) OVERRIDES=off ;;
+    --with-overrides) OVERRIDES=on; SHELL_OVERRIDES=on ;;
+    --without-overrides) OVERRIDES=off; SHELL_OVERRIDES=off ;;
+    --with-shell-overrides) SHELL_OVERRIDES=on ;;
+    --without-shell-overrides) SHELL_OVERRIDES=off ;;
     --os) OS=${2:-}; shift ;;
-    -h | --help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h | --help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
   shift
@@ -39,7 +44,7 @@ done
 REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
 CONFIG=$HOME/.config # the packages mirror $HOME, so this is where stow puts .config
 BACKUP=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backup/$(date +%Y%m%d-%H%M%S)
-ALL_PACKAGES="common common-overrides macos omarchy omarchy-overrides"
+ALL_PACKAGES="common common-overrides macos omarchy omarchy-overrides shell-overrides"
 
 say() { printf '%s\n' "$*"; }
 run() { if ((DRY)); then say "  [dry-run] $*"; else "$@"; fi; }
@@ -164,13 +169,21 @@ ensure_block() {
 
 say "==> Platform: $OS"
 
-# Overrides: always on for macOS (that config is the original, not a layer). On Omarchy they
-# stay as they are unless asked: on if they are stowed now (old or new layout).
+# Overrides: always on for macOS (that config is the original, not a layer; shell-overrides is
+# Omarchy-only, macOS has its own .zshrc). On Omarchy they stay as they are unless asked: on if
+# they are stowed now. Layouts before shell-overrides/ kept the shell files in the full layer.
 if [[ $OS == macos ]]; then
   OVERRIDES=on
-elif [[ $OVERRIDES == keep ]]; then
-  OVERRIDES=skip
-  points_into_repo "$CONFIG/dotfiles/overrides.bash" && OVERRIDES=on
+  SHELL_OVERRIDES=skip
+else
+  if [[ $OVERRIDES == keep ]]; then
+    OVERRIDES=skip
+    points_into_repo "$CONFIG/kitty/dotfiles-overrides.conf" && OVERRIDES=on
+  fi
+  if [[ $SHELL_OVERRIDES == keep ]]; then
+    SHELL_OVERRIDES=skip
+    points_into_repo "$CONFIG/dotfiles/overrides.bash" && SHELL_OVERRIDES=on
+  fi
 fi
 
 say "==> Cleaning links into this repo that no package owns"
@@ -205,6 +218,10 @@ else
       unstow_pkg common-overrides
       say "  note: restore Omarchy's stock starship prompt with: omarchy refresh config starship.toml"
       ;;
+  esac
+  case $SHELL_OVERRIDES in
+    on) stow_pkg shell-overrides ;;
+    off) unstow_pkg shell-overrides ;;
   esac
 fi
 

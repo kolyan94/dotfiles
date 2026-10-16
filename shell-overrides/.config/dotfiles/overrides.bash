@@ -1,5 +1,5 @@
 # OPT-IN bash overrides: these change how existing Omarchy/system behavior works.
-# Linked to ~/.config/dotfiles/overrides.bash by `./install.sh --with-overrides`
+# Linked to ~/.config/dotfiles/overrides.bash by `./install.sh --with-shell-overrides`
 # and sourced at the end of shell.bash. Interactive shells only.
 # The aliases and fzf look shared with zsh live in overrides.sh.
 
