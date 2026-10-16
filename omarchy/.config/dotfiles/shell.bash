@@ -27,7 +27,6 @@ unset -f _dots_path
 #######################################################
 alias q='exit'
 alias svi='sudo nvim'
-alias vis='nvim "+set si"'
 # Arch ships no vi/vim here; fill the gap with nvim (a real vi/vim, if installed later, wins)
 command -v vi &>/dev/null || alias vi='nvim'
 command -v vim &>/dev/null || alias vim='nvim'
@@ -39,7 +38,25 @@ alias ipexternal='curl -s ifconfig.me && echo'
 command -v eza &>/dev/null && alias ll='eza -lah --header --group-directories-first --icons=auto'
 command -v tree &>/dev/null || { command -v eza &>/dev/null && alias tree='eza --tree --icons=auto'; }
 command -v evince &>/dev/null && alias pdf='runfree evince'
-alias vif='nvim "$(fzf)"'
+alias path='echo "$PATH" | tr ":" "\n"'
+
+# git (Omarchy has g, gcm, gcam, gcad; `gs` is Ghostscript, so status is gst)
+alias gst='git status -sb'
+alias gp='git push'
+alias gl='git pull'
+alias glog='git log --oneline --graph --decorate -20'
+
+# systemd / system
+alias failed='systemctl --failed'
+alias scu='systemctl --user'
+alias jf='journalctl -f'
+alias ports='ss -tulpn'
+
+# PlatformIO / Arduino
+alias pb='pio run'
+alias pu='pio run -t upload'
+alias pum='pio run -t upload && pio device monitor'
+command -v arduino-cli &>/dev/null && alias acli='arduino-cli'
 
 # Fuzzy-pick a file (with preview) and open it in its default app
 preview() {
@@ -131,14 +148,6 @@ pdrun() {
   local dir=${1:-.} name
   name=$(basename -- "$(cd -- "$dir" && pwd)")
   pdc -- "$dir/source" "$dir/$name.pdx" && runfree PlaydateSimulator "$dir/$name.pdx"
-}
-
-# Random-height bars across the width of the screen
-random_bars() {
-  local chars=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █) cols i out=""
-  cols=$(tput cols)
-  for ((i = 0; i < cols; i++)); do out+=${chars[RANDOM % ${#chars[@]}]}; done
-  echo "$out"
 }
 
 # Opt-in layer that changes defaults (installed by `./install.sh --with-shell-overrides`).

@@ -58,7 +58,7 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 
 | Path (in `omarchy/`, or `common/` for yazi and vim-be-good) | What it adds | How it hooks in |
 | --- | --- | --- |
-| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi vis vif help iplocal ipexternal ll tree pdf`, `preview` (fzf a file, open it) | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
+| `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi help iplocal ipexternal ll tree pdf path`, git `gst gp gl glog`, systemd `failed scu jf ports`, PlatformIO `pb pu pum acli`, `preview` (fzf a file, open it) | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
 | `.config/nvim/` | keys on free `<leader>` slots, extra LSP servers and parsers, oil, dap, obsidian, mini.surround (`gs*`), vim-be-good | per-file links into `~/.config/nvim` |
 | `.config/kitty/dotfiles.conf` | `ctrl+alt+enter` new window in same dir | `include` appended to `kitty.conf` |
 | `.config/tmux/dotfiles.conf` | tpm, floax (`prefix F`), sessionx (`prefix O`) | `source-file` appended to `tmux.conf` |
@@ -74,7 +74,7 @@ only the shell row, without the prompt, terminal and Neovim changes.
 
 | Path (in `omarchy-overrides/.config/`; the shell files are in `shell-overrides/`; starship, hardtime, bqf, precognition, vim-sleuth, visual-multi and the json ftplugin are in `common-overrides/`) | What it changes |
 | --- | --- |
-| `dotfiles/overrides.{sh,bash,zsh}` | vi mode with cursor shapes (`.bash` / `.zsh`); shared by both shells (`.sh`): `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
+| `dotfiles/overrides.{sh,bash,zsh}` | vi mode with cursor shapes (`.bash` / `.zsh`); shared by both shells (`.sh`): `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, drops Omarchy's `r`=rails, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
 | `kitty/dotfiles-overrides.conf` | beam cursor with trail, window padding |
 | `tmux/dotfiles-overrides.conf` | Shift-arrow / Alt-Shift-h,l window keys, cwd-preserving `"` and `%` splits |
 | `starship.toml` | replaces Omarchy's prompt |

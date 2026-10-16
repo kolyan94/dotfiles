@@ -10,8 +10,8 @@
 # Load shared shell configuration (aliases, functions, environment, tool init)
 [[ -f /usr/share/omarchy-zsh/shell/all ]] && source /usr/share/omarchy-zsh/shell/all
 
-# dotfiles shell layer, shared with bash. Its functions are bash-style (0-based arrays in
-# random_bars), so load them with sh emulation, which stays attached to the functions
+# dotfiles shell layer, shared with bash. Its functions are written for bash (word splitting,
+# 0-based indexing), so load them with sh emulation, which stays attached to the functions
 [[ -r ~/.config/dotfiles/shell.bash ]] && emulate sh -c 'source ~/.config/dotfiles/shell.bash'
 
 # Personal choice over Omarchy's c='opencode'

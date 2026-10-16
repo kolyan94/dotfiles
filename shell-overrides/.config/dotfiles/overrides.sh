@@ -18,8 +18,9 @@ alias mv='mv -iv'
 alias rm='rm -iv'
 alias rmdir='rmdir -v'
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+
+# Omarchy aliases not used here (r=rails)
+unalias r 2>/dev/null
 
 # vi/vim -> nvim even when a real vi/vim is installed (base only fills in when they are missing)
 command -v nvim &>/dev/null && alias vi='nvim' && alias vim='nvim'
