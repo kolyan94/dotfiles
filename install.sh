@@ -180,9 +180,11 @@ while IFS= read -r -d '' l; do
   points_into_repo "$l" || continue
   in_package "$(link_target "$l")" || drop_link "$l"
 done < <(
-  find "$HOME" -maxdepth 1 -type l -print0
-  [[ -d $CONFIG ]] && find "$CONFIG" -type l -print0
-  [[ -d $HOME/.local/bin ]] && find "$HOME/.local/bin" -type l -print0
+  # -lname prefilter: ~/.config can hold thousands of unrelated links (browsers, node, ...)
+  name="*${REPO##*/}/*"
+  find "$HOME" -maxdepth 1 -type l -lname "$name" -print0
+  [[ -d $CONFIG ]] && find "$CONFIG" -type l -lname "$name" -print0
+  [[ -d $HOME/.local/bin ]] && find "$HOME/.local/bin" -type l -lname "$name" -print0
   true
 )
 
