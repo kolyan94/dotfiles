@@ -1,0 +1,4 @@
+# `stow .` from the repo root is the pre-2026-10 macOS install. Packages are stowed by
+# ./install.sh now, so ignore everything here to keep a stray `stow .` from linking
+# common/, macos/, ... into $HOME.
+.+

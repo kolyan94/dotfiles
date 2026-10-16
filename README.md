@@ -1,38 +1,60 @@
-# dotfiles (Omarchy branch)
+# dotfiles
 
-Personal config for an [Omarchy](https://omarchy.org) (Arch + Hyprland) machine, ported from a
-macOS setup. `main` is the macOS original. Managed with [GNU Stow](https://www.gnu.org/software/stow/):
-`base/`, `zsh/` and `overrides/` are packages that each mirror `$HOME`.
+Personal config for macOS and [Omarchy](https://omarchy.org) (Arch + Hyprland) machines, from one
+branch. Managed with [GNU Stow](https://www.gnu.org/software/stow/): every top-level package below
+mirrors `$HOME`, and `./install.sh` stows the ones for the machine it runs on.
 
-**Omarchy stays the base.** By default this branch only *adds* things: new commands, keys on
-unused keys, new plugins and tools. It changes no Omarchy or LazyVim default, and edits no file
-Omarchy owns, so `omarchy update` and `omarchy theme set` keep working. Anything that would
-override a default lives in `overrides/` and is applied only when you ask for it.
+| Package | What it holds | macOS | Omarchy |
+| --- | --- | --- | --- |
+| `common/` | identical on every machine and on by default everywhere (yazi `init.lua`/`keymap.toml`/`yazi.toml`, vim-be-good) | always | always |
+| `common-overrides/` | identical everywhere, but on Omarchy it changes a default (starship prompt, hardtime, bqf, precognition, vim-sleuth, visual-multi, json ftplugin) | always | `--with-overrides` |
+| `macos/` | the macOS setup: zinit `.zshrc`, kitty, tmux, mise, standalone (kickstart-style) Neovim with xcodebuild, yazi theme and plugins | always | - |
+| `omarchy/` | the Omarchy overlay: additive shell layer, zsh via omarchy-zsh, LazyVim overlay, theme templates | - | always |
+| `omarchy-overrides/` | Omarchy opt-in layer: vi mode and safety aliases, kitty/tmux tweaks, LazyVim look and behavior | - | `--with-overrides` |
+
+A change to a `common*` file reaches every machine on the next `git pull` (the links point into the
+repo), with no branch merges. Put a file in `common/` only when it is the same on both systems.
 
 ```bash
-sudo pacman -S stow omarchy-zsh   # prerequisites
-git clone -b omarchy https://github.com/kolyan94/dotfiles && cd dotfiles
+# macOS                           # Omarchy
+brew install stow                 sudo pacman -S stow omarchy-zsh
+git clone https://github.com/kolyan94/dotfiles && cd dotfiles
 ./install.sh --dry-run            # preview
-./install.sh                      # stow base + zsh (additive)
-./install.sh --with-overrides     # also stow overrides/ (opt-in)
-./install.sh --without-overrides  # take the overrides out again
+./install.sh                      # stow this machine's packages
+./install.sh --with-overrides     # Omarchy only: also the opt-in layer
+./install.sh --without-overrides  # Omarchy only: take it out again
 ```
 
 Stow runs with `--no-folding`, so every file is its own symlink and directories such as
-`~/.config/nvim` stay real and Omarchy's. Anything a link would replace is backed up first to
-`~/.local/state/dotfiles/backup/<timestamp>/`. To make zsh the login shell: `chsh -s /usr/bin/zsh`.
+`~/.config/nvim` stay real. Anything a link would replace is backed up first to
+`~/.local/state/dotfiles/backup/<timestamp>/`. The installer runs on macOS's bash 3.2 and BSD tools.
+
+**Moving a Mac from the old `stow .` layout:** `git pull`, then `./install.sh --dry-run` and
+`./install.sh`. It drops the old links (including folded ones like `~/.config/nvim -> repo`), stows the
+new packages and moves runtime files the old layout made apps write into the repo (tpm plugins,
+`lazy-lock.json`) to where they belong. Every config file resolves to the same content as before. A
+root `.stow-local-ignore` makes a stray `stow .` a no-op.
+
+# Omarchy
+
+**Omarchy stays the base.** By default the Omarchy packages only *add* things: new commands, keys on
+unused keys, new plugins and tools. They change no Omarchy or LazyVim default, and edit no file
+Omarchy owns, so `omarchy update` and `omarchy theme set` keep working. Anything that would
+override a default lives in `common-overrides/` or `omarchy-overrides/` and is applied only when you
+ask for it. To make zsh the login shell: `chsh -s /usr/bin/zsh`, then reboot (logging out keeps the
+old `$SHELL` in the systemd user session).
 
 ## Shell: zsh
 
-`zsh/.zshrc` loads [omarchy-zsh](https://github.com/omacom/omarchy-zsh) (Omarchy's official zsh
+`omarchy/.zshrc` loads [omarchy-zsh](https://github.com/omacom/omarchy-zsh) (Omarchy's official zsh
 config: same aliases, functions, starship, zoxide, mise and fzf setup as its bash) and then the
 shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which would overwrite
-`~/.bashrc`. `zsh/.zshenv` sets `OMARCHY_PATH`/`PATH` for every zsh. Bash keeps working as before.
+`~/.bashrc`. `omarchy/.zshenv` sets `OMARCHY_PATH`/`PATH` for every zsh. Bash keeps working as before.
 `c` is `clear` here (Omarchy makes it `opencode`).
 
 ## Added by default
 
-| Path (in `base/`) | What it adds | How it hooks in |
+| Path (in `omarchy/`, or `common/` for yazi and vim-be-good) | What it adds | How it hooks in |
 | --- | --- | --- |
 | `.config/dotfiles/shell.bash` | `y` (yazi cd), `cpp`, `cpg`, `mvg`, `mkdirg`, `runfree`, `random_bars`, `vi`/`vim` -> nvim when no vi/vim is installed, `serial` (fzf port picker + tio / `pio device monitor`), `pdrun` (Playdate build + simulator), aliases `q lg svi vis help iplocal ipexternal` | sourced by `~/.zshrc`; one block appended to `~/.bashrc` |
 | `.config/nvim/` | keys on free `<leader>` slots, extra LSP servers and parsers, oil, dap, obsidian, mini.surround (`gs*`), vim-be-good | per-file links into `~/.config/nvim` |
@@ -47,7 +69,7 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 
 These change existing behavior or look, so they are off by default.
 
-| Path (in `overrides/.config/`) | What it changes |
+| Path (in `omarchy-overrides/.config/`; starship, hardtime, bqf, precognition, vim-sleuth, visual-multi and the json ftplugin are in `common-overrides/`) | What it changes |
 | --- | --- |
 | `dotfiles/overrides.{sh,bash,zsh}` | vi mode with cursor shapes (`.bash` / `.zsh`); shared by both shells (`.sh`): `cp -i`/`mv -i`/`rm -i`/`mkdir -p`/`grep --color` aliases, `cat`->bat, `top`->btop, `vi`/`vim`->nvim, fzf layout |
 | `kitty/dotfiles-overrides.conf` | beam cursor with trail, window padding |
@@ -77,9 +99,9 @@ Omarchy's LazyVim is the base and nothing it ships is edited. `plugin/dotfiles.l
 `lua/dotfiles/keymaps.lua` after LazyVim's own keymaps, and `lua/plugins/*.lua` adds plugins.
 The override layer (`lua/dotfiles/overrides/*`, extra specs) exists only when installed with
 `--with-overrides`. Theme hot-reload, transparency and the OSC 52 clipboard are untouched.
-See [`base/.config/nvim/SHORTCUTS.md`](base/.config/nvim/SHORTCUTS.md).
+See [`omarchy/.config/nvim/SHORTCUTS.md`](omarchy/.config/nvim/SHORTCUTS.md).
 
-## Removed from the macOS config
+## Left out of the Omarchy packages (still in `macos/`)
 
 - **macOS zsh setup**: the old `.zshrc`, zinit and plugins, the zsh highlight theme, the unsourced 86 KB `.zsh_aliases` (zsh now comes from omarchy-zsh, see above).
 - **macOS-only**: Homebrew paths, `xcodebuild.nvim` and the Xcode/`xcrun` LSP launcher, the Xcode lualine widget, `com.brave.Browser`.
@@ -100,6 +122,13 @@ See [`base/.config/nvim/SHORTCUTS.md`](base/.config/nvim/SHORTCUTS.md).
   and `:PlaydateRun` / `pdrun` build `source/` and open the simulator. API types: clone
   [playdate-luacats](https://github.com/notpeter/playdate-luacats) to `~/.local/share/playdate-luacats`.
 - The Obsidian vault path in `lua/plugins/obsidian.lua` is `~/Documents/Obsidian/Zettel`.
+
+# macOS
+
+`macos/` is the original setup, unchanged: `.zshrc` with zinit (syntax highlighting, completions,
+autosuggestions, fzf-tab, zsh-vi-mode) and starship, kitty and tmux (tpm) configs, a mise
+`config.toml`, Tokyo Night colors throughout, and a standalone Neovim built from kickstart.nvim
+(telescope, toggleterm, xcodebuild.nvim, Xcode `sourcekit-lsp`). See `macos/.config/nvim/SHORTCUTS.md`.
 
 ## License
 
