@@ -18,16 +18,36 @@ return {
           mason = false,
           cmd = { "clangd", "--background-index", "--query-driver=**" },
         },
-        pylsp = {
+        -- Python: basedpyright for types/completion/navigation, ruff for lint, fixes, import
+        -- sorting and formatting. The interpreter comes from the project's venv (dotfiles.python),
+        -- or from :VenvSelect (<leader>cv), which restarts the servers with the chosen one.
+        basedpyright = {
+          before_init = function(_, config)
+            config.settings = config.settings or {}
+            config.settings.python = vim.tbl_extend("force", config.settings.python or {}, {
+              pythonPath = require("dotfiles.python").python(config.root_dir),
+            })
+          end,
           settings = {
-            pylsp = {
-              plugins = {
-                pycodestyle = { enabled = false },
-                mccabe = { enabled = false },
-                pyflakes = { enabled = true },
-                rope_autoimport = { enabled = true },
-                rope_completion = { enabled = true },
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = "standard", -- the default "recommended" flags almost every line
+                diagnosticMode = "openFilesOnly",
+                autoImportCompletions = true,
               },
+            },
+          },
+        },
+        ruff = {
+          -- hover comes from basedpyright; ruff's only shows rule docs
+          on_attach = function(client) client.server_capabilities.hoverProvider = false end,
+          keys = {
+            {
+              "<leader>co",
+              function()
+                vim.lsp.buf.code_action({ apply = true, context = { only = { "source.organizeImports" }, diagnostics = {} } })
+              end,
+              desc = "Organize Imports",
             },
           },
         },
@@ -50,6 +70,6 @@ return {
   },
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "black", "isort", "clang-format", "prettier" } },
+    opts = { ensure_installed = { "debugpy", "clang-format", "prettier" } },
   },
 }

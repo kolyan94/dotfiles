@@ -22,7 +22,7 @@ return {
       return { timeout_ms = 500, lsp_format = 'fallback' }
     end,
     formatters_by_ft = {
-      python = { 'isort', 'black' },
+      python = { 'ruff_organize_imports', 'ruff_format' }, -- black-compatible output
       c = { 'clang_format' },
       cpp = { 'clang_format' },
       lua = { 'stylua' },

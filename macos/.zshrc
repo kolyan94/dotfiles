@@ -366,8 +366,11 @@ source ~/.config/zsh/zsh-syntax-highlightin-tokyonight.zsh
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 
-# Zoxide config for zsh plugins 
+# Zoxide config for zsh plugins
 eval "$(zoxide init --cmd cd zsh)"
+
+# Python helpers shared with Omarchy (py, va, vd, mkvenv, uv completion)
+[[ -r ~/.config/dotfiles/python.sh ]] && source ~/.config/dotfiles/python.sh
 
 # Tmuxifier config for zsh plugins
 # eval "$(tmuxifier init -)"

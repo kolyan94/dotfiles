@@ -59,6 +59,9 @@ inside it, or backups land in the real one): `--os macos` works on Linux too.
   never by switching the live theme. `omarchy theme refresh` re-renders without changing the wallpaper.
 - **Never export** `EDITOR`, `BROWSER`, `TERMINAL`, `PAGER`, `LC_ALL`, or set `clipboard=unnamedplus` in nvim.
 - **mise** (Omarchy): only tools Omarchy does not install through pacman, in `omarchy/.config/mise/conf.d/dotfiles.toml`.
+- **Python** must stay the same on both systems: the shared parts are in `common/`; basedpyright + ruff
+  are configured in each `lspconfig.lua` (LazyVim `opts.servers` / macOS `servers` table), formatters in
+  each `conform.lua`, debugpy in each `dap.lua`, all through `require("dotfiles.python")`.
 - Files here are symlinked, so edit them in the repo, not under `~/.config`. Keep `.gitignore` files
   out of packages (stow skips them).
 
@@ -67,7 +70,10 @@ inside it, or backups land in the real one): `--os macos` works on Linux too.
 ```
 install.sh                         idempotent installer for both platforms
 .stow-local-ignore                 makes a stray `stow .` from the root a no-op
-common/.config/                    every machine: yazi (init/keymap/yazi.toml), nvim vim-be-good
+common/.config/                    every machine: dotfiles/python.sh (sourced by both .zshrc files and
+                                   shell.bash), nvim lua/dotfiles/python.lua (venv lookup used by the
+                                   LSP/DAP/neotest setups of both configs) + plugins/python.lua
+                                   (venv-selector, neotest), yazi (init/keymap/yazi.toml), vim-be-good
 common-overrides/.config/          macOS always, Omarchy opt-in: starship.toml, nvim hardtime bqf
                                    precognition vim-sleuth visual-multi, ftplugin/json.lua
 macos/                             .zshrc, .config/{alias,kitty,tmux,mise,lazygit,zsh,backgrounds},

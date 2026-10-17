@@ -1,17 +1,22 @@
 [tools]
 bat = "latest"
 docker-cli = "latest"
+fd = "latest" # venv-selector.nvim searches for venvs with it
 fzf = "latest"
 lazygit = "latest"
 lsd = "latest"
 lua = "latest"
 neovim = "latest"
 node = "latest"
+python = "3.14"
+"pipx:pre-commit" = "latest"
 rclone = "latest"
 ripgrep = "latest"
+ruff = "latest"
 starship = "latest"
 tlrc = "latest"
 tmux = "latest"
 tree-sitter = "latest"
+uv = "latest" # Python versions, venvs and packages; also the pipx: backend
 yazi = "latest"
 zoxide = "latest"

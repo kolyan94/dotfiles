@@ -27,6 +27,7 @@ return {
   },
   config = function()
     local dap = require("dap")
+    local py = require("dotfiles.python")
     local dapui = require("dapui")
 
     require("mason-nvim-dap").setup({
@@ -108,30 +109,40 @@ return {
           options = { source_filetype = "python" },
         })
       else
+        -- debugpy from mason, so projects need not install it; the code runs in the venv's python
         cb({
           type = "executable",
-          command = "python",
+          command = py.debugpy_python(),
           args = { "-m", "debugpy.adapter" },
           options = { source_filetype = "python" },
         })
       end
     end
 
+    local venv = function() return py.python() end
     dap.configurations.python = {
+      { type = "python", request = "launch", name = "Launch file", program = "${file}", pythonPath = venv },
       {
         type = "python",
         request = "launch",
-        name = "Launch file",
+        name = "Launch file with arguments",
         program = "${file}",
-        pythonPath = function()
-          local cwd = vim.fn.getcwd()
-          if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-            return cwd .. "/venv/bin/python"
-          elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-            return cwd .. "/.venv/bin/python"
-          end
-          return "/usr/bin/python"
-        end,
+        args = function() return vim.split(vim.fn.input("Arguments: "), " +", { trimempty = true }) end,
+        pythonPath = venv,
+      },
+      {
+        type = "python",
+        request = "launch",
+        name = "Launch module",
+        module = function() return vim.fn.input("Module (e.g. app.main): ") end,
+        cwd = "${workspaceFolder}",
+        pythonPath = venv,
+      },
+      {
+        type = "python",
+        request = "attach",
+        name = "Attach (localhost:5678, python -m debugpy --listen 5678)",
+        connect = { host = "127.0.0.1", port = 5678 },
       },
     }
 

@@ -150,6 +150,10 @@ pdrun() {
   pdc -- "$dir/source" "$dir/$name.pdx" && runfree PlaydateSimulator "$dir/$name.pdx"
 }
 
+# Python helpers (common/, shared with macOS). zsh sources them natively from ~/.zshrc instead,
+# because they eval uv's zsh completion, which would break under `emulate sh`.
+[[ -n ${BASH_VERSION:-} && -r ~/.config/dotfiles/python.sh ]] && source ~/.config/dotfiles/python.sh
+
 # Opt-in layer that changes defaults (installed by `./install.sh --with-shell-overrides`).
 # Bash only: it uses `bind` and readline settings. zsh loads overrides.zsh from ~/.zshrc instead.
 [[ -n ${BASH_VERSION:-} && -r ~/.config/dotfiles/overrides.bash ]] && source ~/.config/dotfiles/overrides.bash

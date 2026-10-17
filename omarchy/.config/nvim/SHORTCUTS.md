@@ -21,6 +21,10 @@ Rows marked **(opt-in)** exist only after `./install.sh --with-overrides`.
 | `<leader>rn` | LSP rename |
 | `<leader>ir` `ib` `id` / `:XtoolNew` | iOS via xtool: build + run on iPhone, build, list devices / new project |
 | `:PlaydateRun` / `:PlaydateLuarc` | Playdate: build + open simulator / write `.luarc.json` for lua_ls |
+| `<leader>cv` (python) | Pick the virtualenv (venv-selector); `.venv/` is found without it |
+| `<leader>co` (python) | Organize imports (ruff) |
+| `<leader>Tt` `Tf` `TT` `Tl` | pytest: nearest test, file, all, last (neotest) |
+| `<leader>Td` / `Ts` / `To` `TO` / `TS` | Debug nearest test / summary / output, output panel / stop |
 
 ## Opt-in (`--with-overrides`)
 

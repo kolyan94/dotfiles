@@ -33,7 +33,7 @@ return {
 
         -- Toggle inlay hints
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint or 'textDocument/inlayHint') then
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint or 'textDocument/inlayHint') then
           map('<leader>th', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
@@ -78,18 +78,32 @@ return {
       clangd = {
         cmd = { 'clangd', '--background-index', '--query-driver=**', '-j=12' },
       },
-      pylsp = {
+      -- Python: basedpyright for types/completion/navigation, ruff for lint, fixes, import sorting
+      -- and formatting. The interpreter comes from the project's venv (dotfiles.python) or :VenvSelect.
+      basedpyright = {
+        before_init = function(_, config)
+          config.settings = config.settings or {}
+          config.settings.python = vim.tbl_extend('force', config.settings.python or {}, {
+            pythonPath = require('dotfiles.python').python(config.root_dir),
+          })
+        end,
         settings = {
-          pylsp = {
-            plugins = {
-              pycodestyle = { enabled = false },
-              mccabe = { enabled = false },
-              pyflakes = { enabled = true },
-              rope_autoimport = { enabled = true },
-              rope_completion = { enabled = true },
+          basedpyright = {
+            analysis = {
+              typeCheckingMode = 'standard', -- the default 'recommended' flags almost every line
+              diagnosticMode = 'openFilesOnly',
+              autoImportCompletions = true,
             },
           },
         },
+      },
+      ruff = {
+        on_attach = function(client, bufnr)
+          client.server_capabilities.hoverProvider = false -- hover comes from basedpyright
+          vim.keymap.set('n', '<leader>co', function()
+            vim.lsp.buf.code_action { apply = true, context = { only = { 'source.organizeImports' }, diagnostics = {} } }
+          end, { buffer = bufnr, desc = 'LSP: [O]rganize Imports' })
+        end,
       },
       ts_ls = {},
       html = { filetypes = { 'html', 'twig', 'hbs' } },
@@ -120,12 +134,18 @@ return {
     vim.list_extend(ensure_installed, {
       'stylua',
       'swiftlint',
-      'black',
-      'isort',
+      'debugpy',
       'clang-format',
       'prettier',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+    -- Server settings. mason-lspconfig v2 ignores `handlers` and enables installed servers through
+    -- vim.lsp.config, so register them there too (the handler below covers v1)
+    for server_name, server in pairs(servers) do
+      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      vim.lsp.config(server_name, server)
+    end
 
     -- Setup Mason LSP config
     require('mason-lspconfig').setup {

@@ -94,6 +94,12 @@ This document contains all the key shortcuts for your optimized Neovim configura
 - `<leader>B` - Set conditional breakpoint
 - `F7` - Toggle debug UI
 
+### Python
+- **`<leader>cv`** - Pick the virtualenv (`.venv/` in the project is found without it)
+- **`<leader>co`** - Organize imports (ruff)
+- **`<leader>Tt`** / `<leader>Tf` / `<leader>TT` / `<leader>Tl` - pytest: nearest, file, all, last
+- `<leader>Td` - Debug nearest test, `<leader>Ts` summary, `<leader>To` output, `<leader>TS` stop
+
 ### Git Integration
 - **`<leader>lg`** - Open LazyGit
 - `]c/[c` - Next/previous git change

@@ -6,7 +6,7 @@ mirrors `$HOME`, and `./install.sh` stows the ones for the machine it runs on.
 
 | Package | What it holds | macOS | Omarchy |
 | --- | --- | --- | --- |
-| `common/` | identical on every machine and on by default everywhere (yazi `init.lua`/`keymap.toml`/`yazi.toml`, vim-be-good) | always | always |
+| `common/` | identical on every machine and on by default everywhere (Python shell helpers and Neovim venv/pytest setup, yazi `init.lua`/`keymap.toml`/`yazi.toml`, vim-be-good) | always | always |
 | `common-overrides/` | identical everywhere, but on Omarchy it changes a default (starship prompt, hardtime, bqf, precognition, vim-sleuth, visual-multi, json ftplugin) | always | `--with-overrides` |
 | `macos/` | the macOS setup: zinit `.zshrc`, kitty, tmux, mise, standalone (kickstart-style) Neovim with xcodebuild, yazi theme and plugins | always | - |
 | `omarchy/` | the Omarchy overlay: additive shell layer, zsh via omarchy-zsh, LazyVim overlay, theme templates | - | always |
@@ -37,6 +37,31 @@ new packages and moves runtime files the old layout made apps write into the rep
 `lazy-lock.json`) to where they belong. Every config file resolves to the same content as before. A
 root `.stow-local-ignore` makes a stray `stow .` a no-op.
 
+## Using it on another machine
+
+Nothing personal is stored here: no git identity (`git config --global user.name/user.email`), SSH
+config or keys. Clone it (or fork it, to keep your own changes), then run `./install.sh --dry-run`
+and `./install.sh`. A few paths you may want to change after a fork: the Obsidian vault in
+`*/.config/nvim/lua/plugins/obsidian.lua` (`~/Documents/Obsidian/Zettel`) and the wallpapers in
+`omarchy/.config/omarchy/backgrounds/`.
+
+## Python
+
+Same setup on macOS and Omarchy:
+
+| Piece | What you get |
+| --- | --- |
+| Neovim LSP | **basedpyright** (types, completion, go to definition; `typeCheckingMode = "standard"`) + **ruff** (lint, quick fixes, import sorting). Both installed by mason |
+| Formatting | ruff (`ruff format` + organize imports, black-compatible). `<leader>cf` on Omarchy (format on save with `--with-overrides`), on save on macOS |
+| Virtualenvs | the interpreter is the activated venv, else `.venv/` or `venv/` in the project root (uv, poetry in-project, `python -m venv`), else `python3`. `<leader>cv` picks another one |
+| Tests | pytest through neotest: `<leader>Tt` nearest, `Tf` file, `TT` all, `Td` debug, `Ts` summary |
+| Debugging | debugpy from mason (projects need not install it): `F5` with "Launch file", "... with arguments", "Launch module", "Attach :5678" |
+| Shell | `py`, `va` (activate the nearest `.venv`), `vd` (deactivate), `mkvenv [version]` (uv venv + activate), uv/uvx completion |
+| Tools (mise) | `uv`, `ruff`, `pre-commit`; macOS also gets `python` 3.14 and `fd` |
+
+New project: `uv init app && cd app && uv add --dev pytest && nvim .`. The `.venv/` uv creates is
+picked up by the LSP, tests and debugger without activating it.
+
 # Omarchy
 
 **Omarchy stays the base.** By default the Omarchy packages only *add* things: new commands, keys on
@@ -62,7 +87,7 @@ shared `shell.bash` layer below. Use it instead of `omarchy-setup-zsh`, which wo
 | `.config/nvim/` | keys on free `<leader>` slots, extra LSP servers and parsers, oil, dap, obsidian, mini.surround (`gs*`), vim-be-good | per-file links into `~/.config/nvim` |
 | `.config/kitty/dotfiles.conf` | `ctrl+alt+enter` new window in same dir | `include` appended to `kitty.conf` |
 | `.config/tmux/dotfiles.conf` | tpm, floax (`prefix F`), sessionx (`prefix O`) | `source-file` appended to `tmux.conf` |
-| `.config/mise/conf.d/dotfiles.toml` | yazi, tlrc, rclone; embedded: arduino-cli, uv, PlatformIO (`pio`), esptool | mise merges `conf.d/` |
+| `.config/mise/conf.d/dotfiles.toml` | yazi, tlrc, rclone; Python: ruff, pre-commit; embedded: arduino-cli, uv, PlatformIO (`pio`), esptool | mise merges `conf.d/` |
 | `.config/yazi/` | file manager config and plugins | per-file links (Omarchy has no yazi config) |
 | `.config/omarchy/themed/yazi-theme.toml.tpl` + `hooks/theme-set.d/dotfiles-yazi` | yazi colors that follow the active Omarchy theme | template Omarchy renders on every theme change; the hook copies the result to `~/.config/yazi/theme.toml` |
 | `.config/omarchy/backgrounds/tokyo-night/` | 31 wallpapers | `omarchy theme bg next` picks them up |

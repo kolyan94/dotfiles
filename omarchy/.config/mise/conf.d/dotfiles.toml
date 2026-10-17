@@ -16,3 +16,8 @@ arduino-cli = "latest"
 uv = "latest"
 "pipx:platformio" = "latest" # pio: ESP32 / Arduino / RP2040 builds, `pio device monitor`
 "pipx:esptool" = "latest"    # flash / erase / read ESP chips directly
+
+# Python (Omarchy's pacman python is the system interpreter; uv above installs other versions and
+# makes project venvs, see mkvenv in common/.config/dotfiles/python.sh)
+ruff = "latest"               # linter + formatter CLI (Neovim uses mason's copy)
+"pipx:pre-commit" = "latest"  # git hooks most Python projects use

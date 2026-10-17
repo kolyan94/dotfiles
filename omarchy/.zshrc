@@ -14,6 +14,9 @@
 # 0-based indexing), so load them with sh emulation, which stays attached to the functions
 [[ -r ~/.config/dotfiles/shell.bash ]] && emulate sh -c 'source ~/.config/dotfiles/shell.bash'
 
+# Python helpers shared with macOS (py, va, vd, mkvenv, uv completion)
+[[ -r ~/.config/dotfiles/python.sh ]] && source ~/.config/dotfiles/python.sh
+
 # Personal choice over Omarchy's c='opencode'
 alias c='clear'
 

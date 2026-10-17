@@ -2,5 +2,5 @@
 -- treesitter textobjects (af/if/ac/ic). Only the extra parsers are added.
 return {
   "nvim-treesitter/nvim-treesitter",
-  opts = { ensure_installed = { "cpp", "php", "rust", "swift" } },
+  opts = { ensure_installed = { "cpp", "php", "rust", "swift", "requirements", "rst" } },
 }
