@@ -1,8 +1,35 @@
 gui:
   nerdFontsVersion: "3"
-  branchColors:
-    'main': red
-    'master': red
+
+  # --- Layout: more room for the commit graph and diffs ---
+  sidePanelWidth: 0.28
+  expandFocusedSidePanel: true   # the focused left panel grows (weight below)
+  expandedSidePanelWeight: 2
+  shrinkSidePanelsToContent: true  # empty Files/Branches panels don't take half the screen
+  enlargedSideViewLocation: top  # `+` puts the enlarged list on top, the diff below
+  showRandomTip: false
+  showCommandLog: false          # toggle with `@` when needed
+  commandLogSize: 6
+
+  # --- Fork-style commit graph ---
+  # 'detailed' joins lines to the commit dots and shows exactly where branches split and merge.
+  # It needs the git branch glyphs, which kitty draws itself.
+  commitGraphStyle: detailed
+  statusPanelView: allBranchesLog  # the status panel shows the graph of every branch, like Fork's main view
+  commitAuthorShortLength: 2      # initials, like Fork's avatar
+  commitAuthorLongLength: 20
+  commitHashLength: 7
+  timeFormat: "2006-01-02"
+  shortTimeFormat: "15:04"
+
+  # --- Branches ---
+  showBranchCommitHash: true
+  showDivergenceFromBaseBranch: arrowAndNumber  # ↑3↓1 relative to main
+
+  # --- Files and searching ---
+  showNumstatInFilesView: true   # +12 -3 next to each changed file
+  filterMode: fuzzy
+
   theme:
     activeBorderColor:
       - "#ff9e64"
@@ -28,3 +55,36 @@ gui:
       - "#db4b4b"
     defaultFgColor:
       - "#c0caf5"
+    branchColorPatterns:
+      '^main(/|$)': "#f7768e"
+      '^master(/|$)': "#f7768e"
+      '^develop(/|$)': "#e0af68"
+      '^(feature|feat)/': "#7aa2f7"
+      '^(fix|bugfix|hotfix)/': "#ff9e64"
+      '^release/': "#9ece6a"
+
+git:
+  log:
+    order: topo-order
+    showGraph: always
+    showWholeGraph: true          # every branch in the Commits panel (Ctrl+L toggles it)
+
+  # Status panel graph (`a` cycles through these): compact, then with author and date
+  allBranchesLogCmds:
+    - git log --graph --all --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(yellow)%h%C(reset)%C(auto)%d%C(reset) %s %C(blue)%an%C(reset) %C(dim)%ad%C(reset)'
+    - git log --graph --all --color=always --abbrev-commit --decorate --date=relative --pretty=medium
+
+  # Diff renderers; `|` cycles through them in the diff view
+  diffRenderers:
+    - name: delta
+      command: delta --{{colorScheme}} --paging=never --line-numbers {{if gt .width 150}}--side-by-side{{end}} --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - name: difftastic
+      type: extDiff
+      command: difft --color=always --background={{colorScheme}} --display={{if gt .width 150}}side-by-side{{else}}inline{{end}} --width={{width}} --context={{diffContext}}
+    - name: color-words
+      type: rawGit
+      args: [--color-words]
+
+  localBranchSortOrder: recency   # most recently checked-out branches first
+  autoForwardBranches: onlyMainBranches
+  parseEmoji: true
