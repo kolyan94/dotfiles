@@ -83,6 +83,7 @@ omarchy/                           .zshrc (omarchy-zsh + shell.bash), .zshenv, .
   kitty/dotfiles.conf              included by kitty.conf
   tmux/dotfiles.conf               sourced by tmux.conf, declares tpm plugins
   mise/conf.d/dotfiles.toml        extra mise tools
+  git/config, allowed_signers      git settings (SSH commit signing with ~/.ssh/id_ed25519)
   yazi/package.toml                yazi plugins; theme.toml is generated, not stored
   omarchy/backgrounds/tokyo-night/ user wallpapers for that theme slug
   omarchy/themed/*.tpl             theme templates (yazi); hooks/theme-set.d/ copies the output into place
