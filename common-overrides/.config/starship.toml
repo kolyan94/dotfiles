@@ -15,7 +15,7 @@
 add_newline = true
 
 # Wait 10 milliseconds for starship to check files under the current directory.
-scan_timeout = 10
+scan_timeout = 50 # 10 ms is too short on slow ARM boards (eMMC, low CPU caps)
 command_timeout = 1500 # slow ARM boards: `swift --version` takes ~0.7 s on the Radxa
 
 # Tokyo Night theme inspired format
