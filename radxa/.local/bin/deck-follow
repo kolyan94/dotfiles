@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""Keep the (hidden) cursor in the middle of the focused window, so the scroll knob scrolls the window you
+are working in. No mouse on the deck: scroll goes to the window under the cursor. Started by Hyprland."""
+import json, os, socket, subprocess, time
+sig, rt = os.environ['HYPRLAND_INSTANCE_SIGNATURE'], os.environ.get('XDG_RUNTIME_DIR', f'/run/user/{os.getuid()}')
+def center():
+    try:
+        w = json.loads(subprocess.run(['hyprctl', '-j', 'activewindow'], capture_output=True, text=True).stdout or '{}')
+        if w.get('at'):
+            x, y = w['at'][0] + w['size'][0] // 2, w['at'][1] + w['size'][1] // 2
+            subprocess.run(['hyprctl', 'dispatch', 'movecursor', str(x), str(y)], capture_output=True)
+    except (ValueError, KeyError):
+        pass
+while True:
+    try:
+        s = socket.socket(socket.AF_UNIX); s.connect(f'{rt}/hypr/{sig}/.socket2.sock'); center(); buf = b''
+        while True:
+            data = s.recv(4096)
+            if not data:
+                break
+            buf += data
+            *lines, buf = buf.split(b'\n')
+            if any(l.split(b'>>')[0] in (b'activewindowv2', b'movewindowv2', b'fullscreen', b'changefloatingmode', b'openwindow', b'closewindow') for l in lines):
+                time.sleep(0.05); center()
+    except OSError:
+        time.sleep(2)
