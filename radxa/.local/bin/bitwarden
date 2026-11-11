@@ -1,3 +1,10 @@
 #!/bin/sh
 # Bitwarden desktop (official arm64 tar.gz in ~/.local/opt/bitwarden). Server: the homelab Vaultwarden.
+# Already running: focus its window, or restart it when it runs without a window (closed to background).
+# A cold start takes ~30 s on the Radxa, so say so.
+if pgrep -x bitwarden-app >/dev/null; then
+  hyprctl clients | grep -q 'class: bitwarden' && exec hyprctl dispatch focuswindow class:bitwarden
+  pkill -x bitwarden-app; sleep 3
+fi
+notify-send -t 8000 "Bitwarden" "starting, ~30 s" 2>/dev/null
 exec ~/.local/opt/bitwarden/bitwarden --ozone-platform-hint=auto "$@"
