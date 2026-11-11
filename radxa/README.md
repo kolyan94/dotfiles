@@ -9,6 +9,6 @@ Radxa Zero 3 "cyberdeck" (1280x400 screen, own keyboard, no mouse, two rotary kn
   `SUPER+Esc` deck menu. Apps outside the repo: chromium, localsend (official arm64 .deb), Bitwarden desktop
   (official arm64 tar.gz in ~/.local/opt/bitwarden).
   No blur, shadows or animations (heat). `deck-session` falls back to Wayfire if Hyprland dies at start.
-- `perf cool|fast`: CPU cap 1104 / 1416 MHz (fast reverts after 30 min). Caps live in /etc/default/deck-perf.
+- `perf cool|fast`: CPU cap 1416 / 1608 MHz (fast reverts after 30 min). Caps live in /etc/default/deck-perf.
 - `write [name]`: zen-mode note in the Obsidian vault Inbox, spell check uk+en.
 - nvim: arrow keys enabled again (the knobs send arrows).
