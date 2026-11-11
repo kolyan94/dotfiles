@@ -1,0 +1,9 @@
+#!/bin/bash
+# SUPER+Esc: small keyboard menu for power, perf, Wi-Fi, keys.
+c=$(printf '%s\n' "perf fast (30 min)" "perf cool" "lock" "wifi" "keys" "reload hyprland" "logout" "reboot" "poweroff" | fuzzel --dmenu --prompt "deck> ")
+case "$c" in
+  "perf fast"*) perf fast ;;  "perf cool") perf cool ;;
+  lock) hyprlock ;;  wifi) kitty --class deck-float -e nmtui 2>/dev/null || kitty --class deck-float -e sh -c 'iw dev wlan0 link; read' ;;
+  keys) deck-keys ;;  "reload hyprland") hyprctl reload ;;
+  logout) hyprctl dispatch exit ;;  reboot) systemctl reboot ;;  poweroff) systemctl poweroff ;;
+esac

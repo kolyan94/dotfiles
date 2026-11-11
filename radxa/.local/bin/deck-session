@@ -1,0 +1,11 @@
+#!/bin/bash
+# Started from ~/.zprofile on tty1. Runs the session in ~/.config/deck/session (hyprland | wayfire).
+# If Hyprland dies within 20 s (broken update, bad config), falls back to Wayfire so the deck stays usable.
+s=$(cat ~/.config/deck/session 2>/dev/null || echo hyprland)
+if [ "$s" = hyprland ] && command -v Hyprland >/dev/null; then
+  t=$(date +%s)
+  if command -v start-hyprland >/dev/null; then start-hyprland; else Hyprland; fi
+  [ $(( $(date +%s) - t )) -gt 20 ] && exit 0
+  echo "$(date '+%F %T') hyprland exited early, falling back to wayfire" >> ~/.cache/deck-session.log
+fi
+exec wayfire

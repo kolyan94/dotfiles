@@ -1,0 +1,16 @@
+#!/bin/bash
+# perf cool|fast|toggle|status — CPU power mode on the Radxa (values in /etc/default/deck-perf).
+# fast drops back to cool by itself after 30 min.
+. /etc/default/deck-perf   # COOL_MAX FAST_MAX GPU_MAX
+P=/sys/devices/system/cpu/cpufreq/policy0
+cur=$(cat $P/scaling_max_freq)
+set_max(){ echo "$1" | sudo -n tee $P/scaling_max_freq >/dev/null; pkill -RTMIN+8 waybar 2>/dev/null; }
+case "${1:-status}" in
+  cool) set_max "$COOL_MAX"; systemctl --user stop deck-perf-revert.timer 2>/dev/null; true ;;
+  fast) set_max "$FAST_MAX"; systemctl --user stop deck-perf-revert.timer 2>/dev/null
+        systemd-run --user --quiet --unit deck-perf-revert --on-active=30min "$HOME/.local/bin/perf" cool
+        notify-send "perf fast" "$((FAST_MAX/1000)) MHz for 30 min" 2>/dev/null ;;
+  toggle) [ "$cur" -gt "$COOL_MAX" ] && exec "$0" cool || exec "$0" fast ;;
+  status) m=$((cur/1000)); [ "$cur" -gt "$COOL_MAX" ] && echo "{\"text\":\"⚡${m}\",\"class\":\"fast\"}" || echo "{\"text\":\"${m}\",\"class\":\"cool\"}" ;;
+  *) echo "usage: perf cool|fast|toggle|status"; exit 1 ;;
+esac

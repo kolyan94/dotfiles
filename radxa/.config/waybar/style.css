@@ -1,0 +1,8 @@
+* { font-family: "Hack Nerd Font Mono", monospace; font-size: 12px; min-height: 0; }
+window#waybar { background: #1a1b26; color: #c0caf5; }
+#workspaces button { padding: 0 6px; color: #565f89; border: none; border-radius: 0; }
+#workspaces button.active { color: #7aa2f7; border-bottom: 2px solid #7aa2f7; }
+#window { color: #a9b1d6; }
+#temperature.critical { color: #f7768e; }
+#custom-perf.fast { color: #e0af68; }
+#language, #custom-perf, #temperature, #memory, #network, #clock { padding: 0 4px; }
