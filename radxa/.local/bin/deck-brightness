@@ -1,0 +1,16 @@
+#!/bin/bash
+# deck-brightness up|down|restore|night — software brightness for the deck's HDMI screen.
+# The panel has no backlight control over HDMI (no DDC/CI, checked with ddcutil 2026-11-11), so this dims
+# through hyprsunset's gamma (20-100%). The level survives restarts (~/.cache/deck-brightness).
+F=~/.cache/deck-brightness; N=~/.cache/deck-nightlight
+g=$(cat "$F" 2>/dev/null || echo 100)
+pgrep -x hyprsunset >/dev/null || { setsid -f hyprsunset -i >/dev/null 2>&1 </dev/null; sleep 1; }
+case "${1:-restore}" in
+  up)   g=$(( g + 10 > 100 ? 100 : g + 10 )) ;;
+  down) g=$(( g - 10 < 20 ? 20 : g - 10 )) ;;
+  night) if [ -f "$N" ]; then rm -f "$N"; hyprctl hyprsunset identity >/dev/null; notify-send -t 1500 "Night light off"
+         else touch "$N"; hyprctl hyprsunset temperature 4000 >/dev/null; notify-send -t 1500 "Night light on"; fi ;;
+  restore) [ -f "$N" ] && hyprctl hyprsunset temperature 4000 >/dev/null ;;
+esac
+echo "$g" > "$F"; hyprctl hyprsunset gamma "$g" >/dev/null
+case "$1" in up|down) notify-send -t 1000 -h string:x-canonical-private-synchronous:bright "Brightness $g%" ;; esac
