@@ -1,8 +1,9 @@
 {
   "layer": "top", "position": "top", "height": 22, "spacing": 8,
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-right": ["hyprland/language", "custom/perf", "temperature", "memory", "network", "clock"],
+  "modules-right": ["tray", "hyprland/language", "custom/perf", "temperature", "memory", "network", "clock"],
   "hyprland/window": { "max-length": 50 },
+  "tray": { "icon-size": 14, "spacing": 6 },
   "hyprland/language": { "format": "{short}" },
   "custom/perf": { "exec": "perf status", "return-type": "json", "interval": 5, "signal": 8, "format": "{}", "on-click": "perf toggle" },
   "temperature": { "thermal-zone": 0, "critical-threshold": 70, "format": "{temperatureC}°", "interval": 5 },

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Bitwarden desktop (official arm64 tar.gz in ~/.local/opt/bitwarden). Server: the homelab Vaultwarden.
+exec ~/.local/opt/bitwarden/bitwarden --ozone-platform-hint=auto "$@"

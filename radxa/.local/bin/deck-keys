@@ -1,3 +1,26 @@
-#!/bin/bash
-# SUPER+K: key cheat sheet, read from hyprland.conf.
-grep -E '^bind = ' ~/.config/hypr/hyprland.conf | sed -E 's/^bind = //; s/, /  /; s/,\s*/ → /' | fuzzel --dmenu --prompt "keys> " --lines 12 --width 70 >/dev/null
+#!/usr/bin/env python3
+"""SUPER+K: every deck key with its description, grouped like Omarchy's keybinding menu.
+Reads `bindd` lines and "# @Section" markers from hyprland.conf; Enter runs the chosen action."""
+import os, re, subprocess
+conf = os.path.expanduser('~/.config/hypr/hyprland.conf')
+SYM = {'SUPER': '⌘', 'SHIFT': '⇧', 'CTRL': '⌃', 'ALT': '⌥'}
+KEY = {'RETURN': 'Enter', 'SPACE': 'Space', 'ESCAPE': 'Esc', 'TAB': 'Tab', 'SLASH': '/', 'minus': '-', 'equal': '=',
+       'LEFT': '←', 'RIGHT': '→', 'UP': '↑', 'DOWN': '↓', 'Print': 'PrtSc'}
+rows, acts, section = [], [], ''
+for line in open(conf, encoding='utf-8'):
+    m = re.match(r'#\s*@(.+)', line)
+    if m:
+        section = m.group(1).strip(); continue
+    m = re.match(r'bindd\s*=\s*([^,]*),\s*([^,]+),\s*([^,]+),\s*([^,]+)(?:,\s*(.*))?$', line.strip())
+    if not m:
+        continue
+    mods, key, desc, disp, arg = (g.strip() if g else '' for g in m.groups())
+    combo = ' '.join([SYM.get(x, x) for x in mods.split()] + [KEY.get(key, key.upper() if len(key) == 1 else key)])
+    rows.append(f'{section:<18}{combo:<14}{desc}')
+    acts.append((disp, arg))
+p = subprocess.run(['fuzzel', '--dmenu', '--index', '--prompt', 'keys> ', '--lines', '15', '--width', '90'],
+                   input='\n'.join(rows), capture_output=True, text=True)
+if p.returncode == 0 and p.stdout.strip().isdigit():
+    disp, arg = acts[int(p.stdout.strip())]
+    if disp != 'exec' or 'deck-keys' not in arg:
+        subprocess.run(['hyprctl', 'dispatch', disp] + ([arg] if arg else []))
