@@ -74,11 +74,9 @@ zinit light Aloxaf/fzf-tab
 zinit light jeffreytse/zsh-vi-mode
 
 # Add in snippets
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
+# Turbo mode: loaded right after the first prompt (the 560 git aliases cost ~0.7 s on the Radxa)
+zinit wait lucid for OMZP::git OMZP::sudo OMZP::docker OMZP::command-not-found
 # zinit snippet OMZP::tmuxinator
-zinit snippet OMZP::docker
-zinit snippet OMZP::command-not-found
 
 # Disable the cursor style feature
 # ZVM_CURSOR_STYLE_ENABLED=false
