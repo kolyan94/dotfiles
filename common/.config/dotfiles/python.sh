@@ -37,8 +37,19 @@ mkvenv() {
 # uv / uvx completion
 if command -v uv >/dev/null 2>&1; then
   if [[ -n ${ZSH_VERSION:-} ]]; then
-    eval "$(uv generate-shell-completion zsh)"
-    eval "$(uvx --generate-shell-completion zsh)"
+    # Generated once into a cache dir on fpath and autoloaded on first Tab; eval-ing it on every start cost
+    # ~2.4 s on the Radxa. Regenerated weekly, so uv upgrades get new completions.
+    _dotfiles_cdir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions
+    mkdir -p "$_dotfiles_cdir"
+    if [[ ! -s $_dotfiles_cdir/_uv || -n $(find "$_dotfiles_cdir/_uv" -mtime +7 2>/dev/null) ]]; then
+      uv generate-shell-completion zsh >| "$_dotfiles_cdir/_uv"
+      uvx --generate-shell-completion zsh >| "$_dotfiles_cdir/_uvx"
+    fi
+    fpath=("$_dotfiles_cdir" $fpath)
+    autoload -Uz _uv _uvx
+    compdef _uv uv
+    compdef _uvx uvx
+    unset _dotfiles_cdir
   elif [[ -n ${BASH_VERSION:-} ]]; then
     eval "$(uv generate-shell-completion bash)"
     eval "$(uvx --generate-shell-completion bash)"
