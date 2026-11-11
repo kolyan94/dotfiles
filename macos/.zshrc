@@ -90,7 +90,7 @@ ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 autoload -Uz compinit
 # Full completion check and dump rebuild once a day (or when the dump is missing); otherwise trust the dump.
 # Rebuilding on every start cost ~2 s on the Radxa (compdef x1000 + compdump); unnoticeable on the Macs.
-if [[ ! -s ~/.zcompdump || -n ~/.zcompdump(N.mh+24) ]]; then compinit; else compinit -C; fi
+() { if [[ ! -s ~/.zcompdump || $# -gt 0 ]]; then compinit; else compinit -C; fi } ~/.zcompdump(N.mh+24)
 
 zinit cdreplay -q
 
