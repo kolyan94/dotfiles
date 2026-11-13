@@ -1,0 +1,3 @@
+#!/bin/sh
+# tmux session "main" (or $1) on rp5
+exec rt rp5 "$@"

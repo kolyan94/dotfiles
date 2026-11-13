@@ -1,0 +1,3 @@
+#!/bin/sh
+# tmux session "main" (or $1) on the Mac mini; locally when run on it
+exec rt mac-mini "$@"

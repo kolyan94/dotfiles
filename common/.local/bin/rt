@@ -1,0 +1,20 @@
+#!/bin/sh
+# rt HOST [SESSION]  open (or create) tmux SESSION (default "main") on HOST over SSH.
+# HOST is an ssh alias (~/.ssh/config). On HOST itself it just attaches locally.
+# Leave with prefix d: the session keeps running there. Inside a local tmux the remote one is nested:
+# press the prefix twice (Ctrl+Space Ctrl+Space) to talk to the remote tmux.
+[ -n "$1" ] || { echo "usage: rt HOST [SESSION]" >&2; exit 2; }
+host=$1 session=${2:-main}
+me=$(hostname -s | tr '[:upper:]' '[:lower:]')
+real=$(ssh -G "$host" 2>/dev/null | awk '$1 == "hostname" { print $2; exit }')
+case "$me" in "$host" | "$real" | "${real%%.*}")
+  if [ -n "$TMUX" ]; then # already inside tmux here: switch instead of nesting
+    tmux has-session -t "=$session" 2>/dev/null || tmux new-session -d -s "$session"
+    exec tmux switch-client -t "=$session"
+  fi
+  exec tmux new-session -A -s "$session" ;;
+esac
+# tmux on the far side may live in mise, Homebrew or the system; the remote shell may be bash or zsh
+exec ssh -t "$host" "PATH=\$HOME/.local/share/mise/shims:\$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:\$PATH; \
+  if command -v tmux >/dev/null; then exec tmux new-session -A -s '$session'; \
+  else echo 'tmux is not installed here, plain shell instead'; exec \$SHELL -l; fi"
