@@ -49,6 +49,8 @@ CONFIG=$HOME/.config # the packages mirror $HOME, so this is where stow puts .co
 BACKUP=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backup/$(date +%Y%m%d-%H%M%S)
 ALL_PACKAGES="common common-overrides macos omarchy omarchy-overrides shell-overrides"
 # Per-machine package: hosts/<short hostname>/home mirrors $HOME (Brewfile, launchd/ etc. sit next to it)
+# Name: --host, else ~/.config/dotfiles/host (one word, local file, for machines with long hostnames), else hostname -s
+[[ -n $HOST || ! -r $CONFIG/dotfiles/host ]] || HOST=$(tr -d '[:space:]' <"$CONFIG/dotfiles/host")
 [[ -n $HOST ]] || HOST=$(hostname -s 2>/dev/null | tr '[:upper:]' '[:lower:]')
 HOST_PKG=""
 [[ $HOST != none && -d $REPO/hosts/$HOST/home ]] && HOST_PKG=hosts/$HOST/home

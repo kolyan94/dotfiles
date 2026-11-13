@@ -47,8 +47,9 @@ and `./install.sh`. A few paths you may want to change after a fork: the Obsidia
 
 ## Per-machine files (`hosts/`)
 
-`hosts/<short hostname>/home/` mirrors `$HOME` and is stowed after the OS packages on that machine only
-(`--host NAME` picks another one, `--host none` skips it). Next to `home/`: a `Brewfile`
+`hosts/<name>/home/` mirrors `$HOME` and is stowed after the OS packages on that machine only. The name is
+`--host NAME`, else the one word in `~/.config/dotfiles/host` (not in git), else `hostname -s` in lower case
+(`--host none` skips it). Next to `home/`: a `Brewfile`
 (`brew bundle --file=hosts/<host>/Brewfile`) and `launchd/` agents, which the installer copies (never
 links) into `~/Library/LaunchAgents` when missing. Shared configs pick the host files up when present:
 kitty `globinclude host.conf`, zsh `~/.config/zsh/host.zsh`, mise `~/.config/mise/conf.d/host.toml`.
