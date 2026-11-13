@@ -178,7 +178,7 @@ ensure_block() {
   fi
 }
 
-say "==> Platform: $OS${HOST_PKG:+, host: $HOST}"
+say "==> Platform: $OS${HOST:+, host: $HOST}"
 
 # Overrides: always on for macOS (that config is the original, not a layer; shell-overrides is
 # Omarchy-only, macOS has its own .zshrc). On Omarchy they stay as they are unless asked: on if
@@ -306,7 +306,7 @@ if ((TOOLS)); then
   fi
 fi
 
-[[ $OS == macos && -n $HOST_PKG && -f $REPO/hosts/$HOST/Brewfile ]] &&
+[[ $OS == macos && $HOST != none && -f $REPO/hosts/$HOST/Brewfile ]] &&
   say "  brew    packages for this Mac: brew bundle --file=$REPO/hosts/$HOST/Brewfile"
 
 say "==> Done"

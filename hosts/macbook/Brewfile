@@ -1,0 +1,65 @@
+# Download with resuming and segmented downloading
+brew "aria2"
+# Diff that understands syntax
+brew "difftastic"
+# Easiest way to build and release mobile apps
+brew "fastlane"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.15"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
+# Open source continuous file synchronization application
+brew "syncthing", restart_service: :changed
+# Transfer files from and to an Android smartphone
+cask "android-file-transfer"
+# 3D model slicing software for 3D printers, maintained by Bambu Lab
+cask "bambu-studio"
+# Desktop password and login vault
+cask "bitwarden"
+# Web browser focusing on privacy
+cask "brave-browser"
+# Terminal-based AI coding assistant
+cask "claude-code@latest"
+# Voice and text chat software
+cask "discord"
+# System-wide audio equaliser
+cask "eqmac"
+# Collaborative team software
+cask "figma"
+# GIT client
+cask "fork"
+# 3D parametric modeller
+cask "freecad"
+# File archiver
+cask "keka"
+# Helper application for the Keka file archiver
+cask "kekaexternalhelper"
+# GPU-based terminal emulator
+cask "kitty"
+# HTTP debugging proxy
+cask "proxyman"
+# Imaging utility to install operating systems to a microSD card
+cask "raspberry-pi-imager"
+# Team communication and collaboration software
+cask "slack"
+# Mesh VPN based on WireGuard
+cask "tailscale-app"
+# Messaging app with a focus on speed and security
+cask "telegram"
+# Open-source BitTorrent client
+cask "transmission"
+# Companion app for the Trezor hardware wallet
+cask "trezor-suite"
+# VPN client for secure internet access and private browsing
+cask "tunnelbear"
+# Virtual machines UI using QEMU
+cask "utm"
+# Menu bar toolkit with keep-awake, system monitor and volume mixer
+cask "vorssaint"
+# Video communication and virtual meeting platform
+cask "zoom"
+uv "platformio"

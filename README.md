@@ -60,6 +60,7 @@ on each machine (the mac-mini `~/.ssh/config` only includes it), work hosts in `
 | Host | What |
 | --- | --- |
 | `mac-mini` | kitty windows inside a launchd tmux server, SSH defaults, OpenClaw completion, gitleaks + Bitwarden CLI, Brewfile |
+| `macbook` | Brewfile (name set with `echo macbook > ~/.config/dotfiles/host`) |
 
 ## Python
 
