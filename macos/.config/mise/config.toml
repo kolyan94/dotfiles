@@ -1,4 +1,5 @@
 [tools]
+atuin = "latest" # synced shell history (Ctrl+R), server on rp5
 bat = "latest"
 delta = "latest" # git and lazygit diffs
 difftastic = "latest" # syntax-aware diffs (lazygit `|` cycles to it)

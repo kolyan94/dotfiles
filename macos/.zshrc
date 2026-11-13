@@ -379,5 +379,12 @@ eval "$(zoxide init --cmd cd zsh)"
 # Starship prompt configuration
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
+# Atuin owns Ctrl+R (after fzf's binding above); the Up arrow keeps history-beginning-search.
+# zsh-vi-mode resets key bindings on its first prompt, so hook in after it.
+if command -v atuin >/dev/null; then
+  _dotfiles_atuin() { eval "$(atuin init zsh --disable-up-arrow)"; }
+  if (( ${+functions[zvm_init]} )); then zvm_after_init_commands+=(_dotfiles_atuin); else _dotfiles_atuin; fi
+fi
+
 # Per-machine additions (dotfiles hosts/<host>/), optional
 [[ -r ~/.config/zsh/host.zsh ]] && source ~/.config/zsh/host.zsh

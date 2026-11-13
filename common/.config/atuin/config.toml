@@ -1,0 +1,15 @@
+# Atuin: shell history in SQLite, synced end-to-end encrypted through the homelab server on rp5.
+# Ctrl+R opens the search; the Up arrow keeps the shell's own prefix search.
+sync_address = "http://rp5:8889"   # Tailscale MagicDNS / LAN name, no public service
+auto_sync = true
+sync_frequency = "5m"
+update_check = false
+
+search_mode = "fuzzy"
+filter_mode = "global"             # Ctrl+R inside the search cycles: global / host / session / directory
+style = "compact"
+inline_height = 20
+show_preview = true
+enter_accept = false               # Enter puts the command on the prompt to edit; Tab too
+secrets_filter = true              # never store lines that look like API keys or tokens
+history_filter = ["^\\s"]          # a leading space keeps a command out of history (like HIST_IGNORE_SPACE)
