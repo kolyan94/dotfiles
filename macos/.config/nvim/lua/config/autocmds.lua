@@ -9,3 +9,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+-- Compose files get their own filetype so the compose language server attaches (yamlls still does too)
+vim.filetype.add {
+  pattern = {
+    ['.*/?compose%.ya?ml'] = 'yaml.docker-compose',
+    ['.*/?docker%-compose[%w.-]*%.ya?ml'] = 'yaml.docker-compose',
+  },
+}

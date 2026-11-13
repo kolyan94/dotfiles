@@ -6,8 +6,10 @@ local parsers = {
   'c',
   'cpp',
   'diff',
+  'dockerfile',
   'html',
   'javascript',
+  'json',
   'lua',
   'luadoc',
   'markdown',
@@ -24,6 +26,7 @@ local parsers = {
   'typescript',
   'vim',
   'vimdoc',
+  'yaml',
 }
 
 -- start highlighting (and treesitter indent, except where it is worse than Vim's) in one buffer

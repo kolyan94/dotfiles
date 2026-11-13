@@ -8,6 +8,7 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     { 'j-hui/fidget.nvim', opts = {} },
     { 'folke/lazydev.nvim', ft = 'lua', opts = {} },
+    'b0o/SchemaStore.nvim', -- JSON/YAML schemas: package.json, compose, GitHub Actions, HA...
   },
   config = function()
     -- LSP keymaps on attach
@@ -112,7 +113,14 @@ return {
       ts_ls = {},
       html = { filetypes = { 'html', 'twig', 'hbs' } },
       cssls = {},
-      jsonls = {},
+      jsonls = { settings = { json = { schemas = require('schemastore').json.schemas(), validate = { enable = true } } } },
+      yamlls = {
+        settings = { yaml = { schemaStore = { enable = false, url = '' }, schemas = require('schemastore').yaml.schemas() } },
+      },
+      taplo = {}, -- TOML
+      dockerls = {},
+      docker_compose_language_service = {},
+      rust_analyzer = {},
       bashls = {},
       marksman = {},
       lua_ls = {

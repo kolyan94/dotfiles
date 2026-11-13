@@ -3,6 +3,14 @@ bat = "latest"
 delta = "latest" # git and lazygit diffs
 difftastic = "latest" # syntax-aware diffs (lazygit `|` cycles to it)
 docker-cli = "latest"
+gh = "latest" # GitHub from the terminal: PRs, issues, Actions logs (gh auth login once)
+jq = "latest" # JSON
+yq = "latest" # YAML/TOML/XML, same syntax as jq (compose files, HA configs)
+xh = "latest" # HTTP requests for APIs (httpie syntax, one binary)
+lazydocker = "latest" # Docker TUI; remote too: DOCKER_HOST=ssh://rp5 lazydocker
+dust = "latest" # what takes the disk space
+watchexec = "latest" # re-run a command when files change (tests, builds, any language)
+sd = "latest" # find & replace, simpler than sed
 fd = "latest" # venv-selector.nvim searches for venvs with it
 fzf = "latest"
 lazygit = "latest"
