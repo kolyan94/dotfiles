@@ -49,7 +49,8 @@ This document contains all the key shortcuts for your optimized Neovim configura
 ### Text Objects & Selection
 - **`af/if`** - Select around/inside function
 - **`ac/ic`** - Select around/inside class
-- `as/is` - Select around/inside scope
+- `as` - Select language scope
+- `<M-space>` / `<BS>` (visual) - Grow / shrink the selection by syntax node
 - `]m/[m` - Next/previous function start
 - `]]/[[` - Next/previous class start
 
@@ -68,9 +69,9 @@ This document contains all the key shortcuts for your optimized Neovim configura
 - `<Esc>` - Clear search highlights
 
 ### Advanced Search & Replace
-- **`<leader>sr`** - Open project-wide search & replace (Spectre)
-- `<leader>sw` - Search current word project-wide
-- `<leader>sf` - Search & replace in current file
+- **`<leader>sr`** - Open project-wide search & replace (grug-far)
+- `<leader>sw` - Search current word project-wide (in visual mode: the selection)
+- `<leader>sR` - Search & replace in current file
 - **`<leader>sg`** - Live grep search
 - `<leader>s/` - Search in open files only
 
@@ -107,6 +108,13 @@ This document contains all the key shortcuts for your optimized Neovim configura
 - `<leader>hs` - Stage git hunk
 - `<leader>hr` - Reset git hunk
 - `<leader>hb` - Show git blame
+
+## 🤖 Claude Code (claudecode.nvim)
+
+- **`<leader>ac`** - Toggle Claude Code (terminal split; it sees the open file and selection)
+- `<leader>af` - Focus Claude · `<leader>ar` - Resume a session
+- `<leader>ab` - Add current buffer · `<leader>as` (visual) - Send selection
+- `<leader>aa` / `<leader>ad` - Accept / deny the diff Claude proposes
 
 ## 🖥️ Terminal & Workflow
 

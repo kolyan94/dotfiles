@@ -3,8 +3,8 @@ return {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
-    { 'williamboman/mason.nvim', lazy = false, priority = 100, opts = {} },
-    'williamboman/mason-lspconfig.nvim',
+    { 'mason-org/mason.nvim', lazy = false, priority = 100, opts = {} },
+    'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     { 'j-hui/fidget.nvim', opts = {} },
     { 'folke/lazydev.nvim', ft = 'lua', opts = {} },
@@ -28,12 +28,16 @@ return {
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
         map('K', vim.lsp.buf.hover, 'Hover Documentation')
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-        map('[d', vim.diagnostic.goto_prev, 'Previous [D]iagnostic')
-        map(']d', vim.diagnostic.goto_next, 'Next [D]iagnostic')
+        map('[d', function()
+          vim.diagnostic.jump { count = -1, float = true }
+        end, 'Previous [D]iagnostic')
+        map(']d', function()
+          vim.diagnostic.jump { count = 1, float = true }
+        end, 'Next [D]iagnostic')
 
         -- Toggle inlay hints
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint or 'textDocument/inlayHint') then
+        if client and client:supports_method 'textDocument/inlayHint' then
           map('<leader>th', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
@@ -65,7 +69,7 @@ return {
         focusable = false,
         style = 'minimal',
         border = 'rounded',
-        source = 'always',
+        source = true,
         header = '',
         prefix = '',
       },
@@ -140,23 +144,13 @@ return {
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    -- Server settings. mason-lspconfig v2 ignores `handlers` and enables installed servers through
-    -- vim.lsp.config, so register them there too (the handler below covers v1)
+    -- Neovim 0.11+ style: settings go to vim.lsp.config, and mason-lspconfig v2 calls vim.lsp.enable
+    -- for every server mason has installed (automatic_enable is on by default)
+    vim.lsp.config('*', { capabilities = capabilities })
     for server_name, server in pairs(servers) do
-      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
       vim.lsp.config(server_name, server)
     end
-
-    -- Setup Mason LSP config
-    require('mason-lspconfig').setup {
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
-      },
-    }
+    require('mason-lspconfig').setup { automatic_enable = { exclude = { 'stylua' } } } -- stylua formats via conform
 
     -- Swift LSP (manual setup since it comes with Xcode)
     vim.api.nvim_create_autocmd('FileType', {

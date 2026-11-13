@@ -82,3 +82,10 @@ vim.opt.completeopt = 'menuone,noselect' -- Better completion experience
 -- Better startup time
 vim.loader.enable() -- Enable faster Lua module loading (Neovim 0.9+)
 
+-- Neovim 0.12 built-in cmdline/messages UI (replaces noice + nvim-notify): no "Press ENTER" prompts,
+-- messages show in a small window bottom-right and fade, `g<` opens the full history in a pager.
+if vim.fn.has 'nvim-0.12' == 1 then
+  pcall(function()
+    require('vim._core.ui2').enable { msg = { target = 'msg' } }
+  end)
+end

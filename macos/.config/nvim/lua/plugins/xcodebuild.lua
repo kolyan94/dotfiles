@@ -1,8 +1,10 @@
 -- Xcode build, test, debug integration (macOS only)
 return {
   'wojciech-kulik/xcodebuild.nvim',
-  cond = vim.fn.has('mac') == 1,
-  lazy = false,
+  cond = vim.fn.has 'mac' == 1,
+  -- loads with Swift/ObjC files or an Xcodebuild command (it pulls in dap, telescope and oil: ~80 ms at startup)
+  ft = { 'swift', 'objc', 'objcpp' },
+  cmd = { 'XcodebuildSetup', 'XcodebuildPicker', 'XcodebuildBuild', 'XcodebuildBuildRun', 'XcodebuildTest', 'XcodebuildSelectDevice', 'XcodebuildSelectScheme' },
   dependencies = {
     'nvim-telescope/telescope.nvim',
     'MunifTanjim/nui.nvim',
@@ -19,7 +21,7 @@ return {
     }
 
     -- DAP integration
-    local xcodebuild_dap = require('xcodebuild.integrations.dap')
+    local xcodebuild_dap = require 'xcodebuild.integrations.dap'
     xcodebuild_dap.setup()
 
     -- Debug keymaps
