@@ -1,5 +1,7 @@
 [tools]
 bat = "latest"
+delta = "latest" # git and lazygit diffs
+difftastic = "latest" # syntax-aware diffs (lazygit `|` cycles to it)
 docker-cli = "latest"
 fd = "latest" # venv-selector.nvim searches for venvs with it
 fzf = "latest"

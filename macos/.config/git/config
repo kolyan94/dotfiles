@@ -1,0 +1,43 @@
+# Git settings for the Macs (Omarchy has its own in omarchy/.config/git/config).
+# Identity (user.name / user.email) and credentials stay in ~/.gitconfig, which git also reads.
+
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true          # n / N jump between files in a diff
+	line-numbers = true
+	hyperlinks = true
+	syntax-theme = TwoDark
+[merge]
+	conflictStyle = zdiff3   # shows the common ancestor in conflicts; delta renders it well
+
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true            # rebase (instead of merge) on pull
+[push]
+	autoSetupRemote = true   # set the upstream branch on the first push
+[fetch]
+	prune = true
+[diff]
+	algorithm = histogram    # clearer diffs on moved/edited lines
+	colorMoved = default
+	mnemonicPrefix = true
+[commit]
+	verbose = true           # show the diff in the commit message editor
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate    # most recent branches first
+[tag]
+	sort = -version:refname
+[rerere]
+	enabled = true           # remember conflict resolutions
+	autoupdate = true
