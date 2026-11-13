@@ -12,6 +12,7 @@
 #   ./install.sh --dry-run          print what would change, touch nothing
 #   ./install.sh --no-tools         skip mise / tpm / Neovim plugin sync (no network)
 #   ./install.sh --os macos|omarchy force the platform (testing)
+#   ./install.sh --host NAME        use hosts/NAME/ instead of the short hostname (--host none: skip)
 #
 # Model: each package dir mirrors $HOME and is stowed with --no-folding, so every file is its
 # own symlink and directories like ~/.config/nvim stay real. Files that would block a link are
@@ -26,6 +27,7 @@ TOOLS=1
 OVERRIDES=keep # keep | on | off
 SHELL_OVERRIDES=keep
 OS=""
+HOST=""
 while (($#)); do
   case $1 in
     --dry-run) DRY=1 ;;
@@ -35,6 +37,7 @@ while (($#)); do
     --with-shell-overrides) SHELL_OVERRIDES=on ;;
     --without-shell-overrides) SHELL_OVERRIDES=off ;;
     --os) OS=${2:-}; shift ;;
+    --host) HOST=${2:-}; shift ;;
     -h | --help) sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
@@ -45,6 +48,11 @@ REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
 CONFIG=$HOME/.config # the packages mirror $HOME, so this is where stow puts .config
 BACKUP=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backup/$(date +%Y%m%d-%H%M%S)
 ALL_PACKAGES="common common-overrides macos omarchy omarchy-overrides shell-overrides"
+# Per-machine package: hosts/<short hostname>/home mirrors $HOME (Brewfile, launchd/ etc. sit next to it)
+[[ -n $HOST ]] || HOST=$(hostname -s 2>/dev/null | tr '[:upper:]' '[:lower:]')
+HOST_PKG=""
+[[ $HOST != none && -d $REPO/hosts/$HOST/home ]] && HOST_PKG=hosts/$HOST/home
+[[ -n $HOST_PKG ]] && ALL_PACKAGES="$ALL_PACKAGES $HOST_PKG"
 
 say() { printf '%s\n' "$*"; }
 run() { if ((DRY)); then say "  [dry-run] $*"; else "$@"; fi; }
@@ -138,7 +146,8 @@ prepare() {
 stow_pkg() {
   say "  stow    $1"
   prepare "$1"
-  run stow --no-folding --restow --dir="$REPO" --target="$HOME" "$1"
+  # stow takes a package name, not a path: hosts/x/home -> --dir=REPO/hosts/x home
+  run stow --no-folding --restow --dir="$REPO/$(dirname "$1")" --target="$HOME" "$(basename "$1")"
 }
 
 unstow_pkg() {
@@ -167,7 +176,7 @@ ensure_block() {
   fi
 }
 
-say "==> Platform: $OS"
+say "==> Platform: $OS${HOST_PKG:+, host: $HOST}"
 
 # Overrides: always on for macOS (that config is the original, not a layer; shell-overrides is
 # Omarchy-only, macOS has its own .zshrc). On Omarchy they stay as they are unless asked: on if
@@ -225,6 +234,20 @@ else
   esac
 fi
 
+if [[ -n $HOST_PKG ]]; then
+  stow_pkg "$HOST_PKG"
+  if [[ $OS == macos && -d $REPO/hosts/$HOST/launchd ]]; then
+    # launchd wants real files, so agents are copied (only when missing; edit + copy by hand otherwise)
+    for f in "$REPO/hosts/$HOST/launchd"/*.plist; do
+      [[ -e $f ]] || continue
+      dest=$HOME/Library/LaunchAgents/${f##*/}
+      [[ -e $dest ]] && continue
+      say "  agent   ${f##*/} (load: launchctl bootstrap gui/$(id -u) $dest)"
+      run cp -- "$f" "$dest"
+    done
+  fi
+fi
+
 # The old macOS layout linked whole directories (~/.config/tmux -> repo/.config/tmux), so apps
 # wrote runtime files into the repo: tpm plugins, lazy-lock.json, nvim spell files. Move the
 # ones git no longer tracks to where the apps now look for them.
@@ -280,6 +303,9 @@ if ((TOOLS)); then
     run nvim --headless "+Lazy! sync" +qa || say "  warn: Lazy sync reported errors, open nvim and run :Lazy"
   fi
 fi
+
+[[ $OS == macos && -n $HOST_PKG && -f $REPO/hosts/$HOST/Brewfile ]] &&
+  say "  brew    packages for this Mac: brew bundle --file=$REPO/hosts/$HOST/Brewfile"
 
 say "==> Done"
 if ((DRY)); then

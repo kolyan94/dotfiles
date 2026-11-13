@@ -1,0 +1,15 @@
+# Global gitignore (git reads ~/.config/git/ignore by default)
+.DS_Store
+._*
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+node_modules/
+.idea/
+*.swp
+*~
+.env.local

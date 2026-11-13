@@ -19,6 +19,8 @@ Where a change goes:
   `common-overrides/` (always on for macOS, opt-in on Omarchy). Edit these knowing both systems load them.
 - Only macOS → `macos/`. Only Omarchy → `omarchy/` (additive) or `omarchy-overrides/` (changes a default; shell aliases and
   key bindings that change a default go in `shell-overrides/`).
+- Only one machine → `hosts/<hostname -s>/home/` (stowed only there; Brewfile and `launchd/` sit next
+  to `home/`). The repo is public: no addresses, keys, tokens or work hosts, ever.
 - Never keep two copies of one path in packages that are stowed together (stow would conflict):
   `common*` must not share a path with `macos/` or `omarchy*`.
 

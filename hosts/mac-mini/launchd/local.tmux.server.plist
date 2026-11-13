@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>local.tmux.server</string>
+  <key>ProgramArguments</key>
+  <array><string>/Users/nicvan_mini/.local/share/mise/installs/tmux/latest/tmux</string><string>-D</string></array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/Users/nicvan_mini/.local/share/mise/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>SHELL</key><string>/bin/zsh</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+    <key>TERM</key><string>xterm-kitty</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ProcessType</key><string>Interactive</string>
+  <key>StandardErrorPath</key><string>/Users/nicvan_mini/Library/Logs/tmux-server.log</string>
+</dict>
+</plist>

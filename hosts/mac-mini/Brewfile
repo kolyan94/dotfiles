@@ -1,0 +1,76 @@
+tap "incoai/tap"
+tap "lindell/connect-iq-sdk-manager-cli"
+tap "maximpri/tap"
+tap "saffsanity/sill"
+# Simple, modern, secure file encryption
+brew "age"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "btop"
+# GNOME document viewer
+brew "evince"
+# Easiest way to build and release mobile apps
+brew "fastlane"
+# GitHub Model Context Protocol server for AI tools
+brew "github-mcp-server"
+# Find what models run on your hardware
+brew "llmfit"
+# Package manager for the Lua programming language
+brew "luarocks"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Deep clean and optimize your Mac
+brew "mole"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# General-purpose speech recognition model
+brew "openai-whisper"
+# Development kit for the Java programming language
+brew "openjdk@17"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
+# Formatting tool for reformatting Swift code
+brew "swiftformat"
+# Tool to enforce Swift style and conventions
+brew "swiftlint"
+# Swift toolchain installer and manager
+brew "swiftly"
+# Open source continuous file synchronization application
+brew "syncthing", restart_service: :changed
+# Little beautifier tool for xcodebuild
+brew "xcbeautify"
+# Build server protocol implementation for integrating Xcode with sourcekit-lsp
+brew "xcode-build-server"
+# Generate your Xcode project from a spec file and your folder structure
+brew "xcodegen"
+# Command-line tool to install and switch between multiple versions of Xcode
+brew "xcodes"
+# Local inference engine for Apple silicon, built around the model
+brew "incoai/tap/splash", trusted: true
+# CLI to download connectIQ resources
+brew "lindell/connect-iq-sdk-manager-cli/connect-iq-sdk-manager-cli", trusted: true
+# Top-style monitor for local LLM servers: memory, paging and throughput
+brew "maximpri/tap/mlxtop", trusted: true
+# Command-line tools for building and debugging Android apps
+cask "android-commandlinetools"
+# 3D model slicing software for 3D printers, maintained by Bambu Lab
+cask "bambu-studio"
+# Web browser focusing on privacy
+cask "brave-browser"
+# Terminal-based AI coding assistant
+cask "claude-code@latest"
+cask "font-hack-nerd-font"
+# File archiver
+cask "keka"
+# Helper application for the Keka file archiver
+cask "kekaexternalhelper"
+# GPU-based terminal emulator
+cask "kitty"
+# HTTP debugging proxy
+cask "proxyman"
+# Streams windows to an iPhone or iPad with touch, Pencil and keyboard control
+cask "saffsanity/sill/sill", trusted: true
+uv "docling"
+uv "llmfit"
+uv "markitdown[all]"
+uv "mempalace"
+uv "skillspector", source: "git+https://github.com/NVIDIA/skillspector.git"

@@ -378,3 +378,6 @@ eval "$(zoxide init --cmd cd zsh)"
 
 # Starship prompt configuration
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+# Per-machine additions (dotfiles hosts/<host>/), optional
+[[ -r ~/.config/zsh/host.zsh ]] && source ~/.config/zsh/host.zsh

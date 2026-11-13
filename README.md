@@ -45,6 +45,21 @@ and `./install.sh`. A few paths you may want to change after a fork: the Obsidia
 `*/.config/nvim/lua/plugins/obsidian.lua` (`~/Documents/Obsidian/Zettel`) and the wallpapers in
 `omarchy/.config/omarchy/backgrounds/`.
 
+## Per-machine files (`hosts/`)
+
+`hosts/<short hostname>/home/` mirrors `$HOME` and is stowed after the OS packages on that machine only
+(`--host NAME` picks another one, `--host none` skips it). Next to `home/`: a `Brewfile`
+(`brew bundle --file=hosts/<host>/Brewfile`) and `launchd/` agents, which the installer copies (never
+links) into `~/Library/LaunchAgents` when missing. Shared configs pick the host files up when present:
+kitty `globinclude host.conf`, zsh `~/.config/zsh/host.zsh`, mise `~/.config/mise/conf.d/host.toml`.
+
+Nothing private goes here, the repo is public: SSH hosts with addresses live in `~/.ssh/config.d/`
+on each machine (the mac-mini `~/.ssh/config` only includes it), work hosts in `~/.ssh/config.local`.
+
+| Host | What |
+| --- | --- |
+| `mac-mini` | kitty windows inside a launchd tmux server, SSH defaults, OpenClaw completion, gitleaks + Bitwarden CLI, Brewfile |
+
 ## Python
 
 Same setup on macOS and Omarchy:

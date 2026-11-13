@@ -1,0 +1,4 @@
+# Mac mini only (homelab / OpenClaw helpers)
+[tools]
+gitleaks = "latest"
+"npm:@bitwarden/cli" = "latest"
