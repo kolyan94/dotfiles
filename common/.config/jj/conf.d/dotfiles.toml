@@ -1,0 +1,18 @@
+# Jujutsu (jj) shared settings. Identity is local, not in git: run once on each machine
+#   jj config set --user user.name "…" && jj config set --user user.email "…"
+# (that writes ~/.config/jj/config.toml; this file sits next to it in conf.d/).
+# Start in any git repo with `jj git init --colocate`: git and jj then share the same repo,
+# so you can switch between `jj`/jjui and `git`/lazygit at any time.
+
+[ui]
+default-command = "log"        # plain `jj` shows the graph
+diff-formatter = ":git"        # git-style diffs, so delta can render them
+pager = "delta"
+editor = "nvim"
+
+[git]
+colocate = true                # `jj git init` / `jj git clone` keep a normal .git next to .jj
+
+[user]
+name = "Mykola Vaniurskyi"
+email = "nicvan@ukr.net"

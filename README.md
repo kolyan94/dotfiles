@@ -62,6 +62,21 @@ on each machine (the mac-mini `~/.ssh/config` only includes it), work hosts in `
 | `mac-mini` | tmux server under launchd (kitty windows attach to it, so they keep LAN access after macOS updates), SSH defaults, OpenClaw completion, gitleaks + Bitwarden CLI, Brewfile |
 | `macbook` | Brewfile (name set with `echo macbook > ~/.config/dotfiles/host`) |
 
+## jj (trial)
+
+[Jujutsu](https://github.com/jj-vcs/jj) works on top of a normal git repo, so it can be tried on one
+project without changing anything for GitHub/Gitea or for git itself. Shared settings:
+`common/.config/jj/conf.d/dotfiles.toml`; identity is local (`jj config set --user user.name/user.email`).
+
+| Step | Command |
+| --- | --- |
+| start in an existing git repo | `jj git init --colocate` (adds `.jj/` next to `.git/`) |
+| see the graph | `jj` or `jjui` (TUI, like lazygit) |
+| name the current change / start the next | `jj describe -m "msg"` / `jj new` |
+| move a branch (bookmark) and push | `jj bookmark set main -r @-` / `jj git push` |
+| undo the last operation, whatever it was | `jj undo` |
+| stop using jj | delete `.jj/`; git and lazygit keep working as before |
+
 ## Python
 
 Same setup on macOS and Omarchy:
