@@ -1,7 +1,2 @@
--- Neovim Configuration
--- Optimized for Swift, C/C++, Python, and Markdown development
-
-require('config.options')
-require('config.keymaps')
-require('config.autocmds')
-require('config.lazy')
+-- macOS (and Radxa): LazyVim, the same base as Omarchy's Neovim. Shared personal layer: common/.config/nvim
+require("config.lazy")

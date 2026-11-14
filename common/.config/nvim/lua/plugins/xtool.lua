@@ -3,6 +3,11 @@
 -- iPhone; there is no simulator. sourcekit-lsp (lspconfig.lua) picks up the project's
 -- .bsp/xtool.json on its own, so this only adds commands and keys.
 
+-- macOS uses xcodebuild.nvim instead (macos/.config/nvim/lua/plugins/xcodebuild.lua), same <leader>i keys
+if vim.fn.has("mac") == 1 then
+  return {}
+end
+
 -- swiftly's toolchain, for an nvim started outside zsh (app launcher) where .zshenv never ran
 local swiftly_bin = vim.fn.expand("~/.local/share/swiftly/bin")
 if vim.fn.isdirectory(swiftly_bin) == 1 and not vim.env.PATH:find(swiftly_bin, 1, true) then

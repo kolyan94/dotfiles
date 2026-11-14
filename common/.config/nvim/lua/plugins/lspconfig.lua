@@ -13,9 +13,9 @@ return {
             { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
           },
         },
-        -- clangd is already on this system (pacman), so skip mason's copy
+        -- clangd: use the system copy when there is one (pacman, Xcode), else mason's
         clangd = {
-          mason = false,
+          mason = vim.fn.executable("clangd") == 0,
           cmd = { "clangd", "--background-index", "--query-driver=**" },
         },
         -- Python: basedpyright for types/completion/navigation, ruff for lint, fixes, import

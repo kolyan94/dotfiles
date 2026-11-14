@@ -1,67 +1,23 @@
--- Bootstrap and configure lazy.nvim plugin manager
-
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+-- Same bootstrap as Omarchy's ~/.config/nvim/lua/config/lazy.lua (the LazyVim starter)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", "https://github.com/folke/lazy.nvim.git", lazypath })
   if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
+    vim.api.nvim_echo({ { "Failed to clone lazy.nvim:\n", "ErrorMsg" }, { out, "WarningMsg" } }, true, {})
+    os.exit(1)
   end
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
-  spec = { { import = 'plugins' } },
-  install = { colorscheme = { 'tokyonight-night' } },
-  defaults = {
-    lazy = true,
-    version = false,
+require("lazy").setup({
+  spec = {
+    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    { import = "plugins" },
   },
-  ui = {
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
+  defaults = { lazy = false, version = false },
+  install = { colorscheme = { "tokyonight", "habamax" } },
+  checker = { enabled = true, notify = false },
   performance = {
-    cache = {
-      enabled = true,
-      path = vim.fn.stdpath('cache') .. '/lazy/cache',
-      disable_events = { 'VimEnter', 'BufReadPre' },
-    },
-    reset_packpath = true,
-    rtp = {
-      reset = true,
-      paths = {},
-      disabled_plugins = {
-        'gzip',
-        'matchit',
-        'matchparen',
-        'netrwPlugin',
-        'tarPlugin',
-        'tohtml',
-        'tutor',
-        'zipPlugin',
-      },
-    },
-  },
-  checker = {
-    enabled = true,
-    frequency = 3600,
-  },
-  change_detection = {
-    enabled = true,
-    notify = false,
+    rtp = { disabled_plugins = { "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" } },
   },
 })
