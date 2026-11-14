@@ -1,6 +1,11 @@
 # Radxa (linux/arm64) fixes for the shared mise config:
 # - python: the default aarch64 build is freethreaded and fails to install ("missing a `lib` directory")
 # - tlrc has no linux/arm64 build
+# - difftastic: the aqua registry looks for an old asset name; take it straight from the GitHub release
+# - gh: GitHub attestation check fails on this box; Debian's package (apt) is used instead
 [settings]
 python.precompiled_flavor = "install_only_stripped"
-disable_tools = ["tlrc"]
+disable_tools = ["tlrc", "difftastic", "gh"]
+
+[tools]
+"github:Wilfred/difftastic" = "latest"
