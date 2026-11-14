@@ -4,6 +4,10 @@
 # have no Mac equivalent here (those modifiers are part of Super).
 # Reload after editing: Super+Shift+R (or `aerospace reload-config`).
 
+config-version = 2
+# Workspaces appear when they have windows (as on Hyprland); none are kept empty
+persistent-workspaces = []
+
 start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
