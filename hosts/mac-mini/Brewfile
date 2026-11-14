@@ -74,3 +74,8 @@ uv "llmfit"
 uv "markitdown[all]"
 uv "mempalace"
 uv "skillspector", source: "git+https://github.com/NVIDIA/skillspector.git"
+
+# Tiling with Omarchy keys (config: macos/.config/aerospace) + Super on Caps Lock (Vorssaint)
+tap "nikitabobko/tap"
+cask "nikitabobko/tap/aerospace"
+cask "vorssaint"

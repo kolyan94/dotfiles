@@ -1,0 +1,89 @@
+# AeroSpace: tiling windows on the Macs with Omarchy's (Hyprland's) keys.
+# Super = Caps Lock, which Vorssaint turns into Ctrl+Option+Cmd (Settings > Super key), so
+# Super+Shift stays a separate combination, as on Omarchy. Omarchy's Super+Alt / Super+Ctrl keys
+# have no Mac equivalent here (those modifiers are part of Super).
+# Reload after editing: Super+Shift+R (or `aerospace reload-config`).
+
+start-at-login = true
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+accordion-padding = 30
+automatically-unhide-macos-hidden-apps = false
+# Focus follows the moved/created window like Hyprland; mouse follows focus across monitors
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+[gaps]
+inner.horizontal = 6
+inner.vertical = 6
+outer.left = 6
+outer.bottom = 6
+outer.top = 6
+outer.right = 6
+
+[mode.main.binding]
+# --- Apps (Omarchy: Super+Enter terminal, Super+Shift+B browser, Super+Shift+F files, Super+Shift+N editor)
+ctrl-alt-cmd-enter = 'exec-and-forget open -na kitty'
+ctrl-alt-cmd-shift-enter = 'exec-and-forget open -a "Brave Browser"'
+ctrl-alt-cmd-shift-b = 'exec-and-forget open -a "Brave Browser"'
+ctrl-alt-cmd-shift-f = 'exec-and-forget open -a Finder'
+ctrl-alt-cmd-shift-n = 'exec-and-forget open -na kitty --args nvim'
+
+# --- Windows
+ctrl-alt-cmd-w = 'close'
+ctrl-alt-cmd-q = 'close'
+ctrl-alt-cmd-j = 'layout tiles horizontal vertical'   # toggle split direction
+ctrl-alt-cmd-t = 'layout floating tiling'             # float / tile
+ctrl-alt-cmd-f = 'fullscreen'
+ctrl-alt-cmd-l = 'layout tiles accordion'             # cycle workspace layout
+ctrl-alt-cmd-m = 'macos-native-minimize'
+ctrl-alt-cmd-left = 'focus left'
+ctrl-alt-cmd-right = 'focus right'
+ctrl-alt-cmd-up = 'focus up'
+ctrl-alt-cmd-down = 'focus down'
+ctrl-alt-cmd-shift-left = 'move left'                 # swap window
+ctrl-alt-cmd-shift-right = 'move right'
+ctrl-alt-cmd-shift-up = 'move up'
+ctrl-alt-cmd-shift-down = 'move down'
+ctrl-alt-cmd-minus = 'resize smart -50'
+ctrl-alt-cmd-equal = 'resize smart +50'
+
+# --- Workspaces 1-10 (Super+N switch, Super+Shift+N move the window there and follow it)
+ctrl-alt-cmd-1 = 'workspace 1'
+ctrl-alt-cmd-2 = 'workspace 2'
+ctrl-alt-cmd-3 = 'workspace 3'
+ctrl-alt-cmd-4 = 'workspace 4'
+ctrl-alt-cmd-5 = 'workspace 5'
+ctrl-alt-cmd-6 = 'workspace 6'
+ctrl-alt-cmd-7 = 'workspace 7'
+ctrl-alt-cmd-8 = 'workspace 8'
+ctrl-alt-cmd-9 = 'workspace 9'
+ctrl-alt-cmd-0 = 'workspace 10'
+ctrl-alt-cmd-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+ctrl-alt-cmd-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+ctrl-alt-cmd-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+ctrl-alt-cmd-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
+ctrl-alt-cmd-shift-5 = 'move-node-to-workspace --focus-follows-window 5'
+ctrl-alt-cmd-shift-6 = 'move-node-to-workspace --focus-follows-window 6'
+ctrl-alt-cmd-shift-7 = 'move-node-to-workspace --focus-follows-window 7'
+ctrl-alt-cmd-shift-8 = 'move-node-to-workspace --focus-follows-window 8'
+ctrl-alt-cmd-shift-9 = 'move-node-to-workspace --focus-follows-window 9'
+ctrl-alt-cmd-shift-0 = 'move-node-to-workspace --focus-follows-window 10'
+ctrl-alt-cmd-tab = 'workspace next'
+ctrl-alt-cmd-shift-tab = 'workspace prev'
+
+# --- Monitors (Omarchy: Super+Shift+Ctrl+arrows; here Super+Shift+[ / ])
+ctrl-alt-cmd-shift-leftSquareBracket = 'move-node-to-monitor --focus-follows-window left'
+ctrl-alt-cmd-shift-rightSquareBracket = 'move-node-to-monitor --focus-follows-window right'
+
+ctrl-alt-cmd-shift-r = 'reload-config'
+
+# Dialogs and small utility windows float instead of tiling
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.vorssaint.utils'
+run = 'layout floating'
