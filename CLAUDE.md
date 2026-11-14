@@ -7,7 +7,7 @@ Guidance for Claude Code when working in this repository.
 One branch of personal dotfiles for two kinds of machines, deployed with GNU Stow by `./install.sh`:
 
 - **macOS** (`common/` + `common-overrides/` + `macos/`): the original setup. zsh with zinit, kitty,
-  tmux, Homebrew/mise, a standalone kickstart-style Neovim (single quotes, 160 columns). Its own
+  tmux, Homebrew/mise, LazyVim like Omarchy (macos/.config/nvim = starter base + xcodebuild). Its own
   colors (Tokyo Night hex) are fine there.
 - **Omarchy** (`common/` + `omarchy/`, plus `shell-overrides/` with `--with-shell-overrides`, or that
   and `common-overrides/` + `omarchy-overrides/` with `--with-overrides`): Arch + Hyprland + zsh via omarchy-zsh (bash still supported) + kitty + tmux +
@@ -76,10 +76,12 @@ common/.config/                    every machine: dotfiles/python.sh (sourced by
                                    shell.bash), nvim lua/dotfiles/python.lua (venv lookup used by the
                                    LSP/DAP/neotest setups of both configs) + plugins/python.lua
                                    (venv-selector, neotest), yazi (init/keymap/yazi.toml), vim-be-good
-common-overrides/.config/          macOS always, Omarchy opt-in: starship.toml, nvim hardtime bqf
+common-overrides/.config/          macOS always, Omarchy opt-in: starship.toml, nvim overrides (dotfiles/overrides/*,
+                                   plugin specs that tune LazyVim), hardtime bqf
                                    precognition vim-sleuth visual-multi, ftplugin/json.lua
 macos/                             .zshrc, .config/{alias,kitty,tmux,mise,lazygit,zsh,backgrounds},
-                                   yazi theme/flavors/plugins/package.toml, nvim (standalone config)
+                                   yazi theme/flavors/plugins/package.toml, nvim LazyVim base (init, lua/config, lazyvim.json)
+                                   + xcodebuild.lua (<leader>i, like xtool on Linux)
 omarchy/                           .zshrc (omarchy-zsh + shell.bash), .zshenv, .local/bin, and .config/:
   dotfiles/shell.bash              new functions/aliases, sourced by ~/.zshrc and the end of ~/.bashrc
   kitty/dotfiles.conf              included by kitty.conf
@@ -89,15 +91,18 @@ omarchy/                           .zshrc (omarchy-zsh + shell.bash), .zshenv, .
   yazi/package.toml                yazi plugins; theme.toml is generated, not stored
   omarchy/backgrounds/tokyo-night/ user wallpapers for that theme slug
   omarchy/themed/*.tpl             theme templates (yazi); hooks/theme-set.d/ copies the output into place
-  nvim/                            overlay on Omarchy's LazyVim (see below)
 shell-overrides/.config/dotfiles/  Omarchy OPT-IN shell: overrides.{sh,bash,zsh} (--with-shell-overrides or --with-overrides)
 omarchy-overrides/.config/         Omarchy OPT-IN, only with --with-overrides
   kitty/dotfiles-overrides.conf tmux/dotfiles-overrides.conf
   lazygit/config.yml
-  nvim/                            mirrors ~/.config/nvim: dotfiles/overrides/*, plugin specs
 ```
 
 ### Neovim overlay
+
+Every machine runs LazyVim with one personal layer: `common/.config/nvim` (additive, all machines) and
+`common-overrides/.config/nvim` (changes defaults: macOS always, Omarchy with `--with-overrides`). Omarchy
+provides its own LazyVim base; on macOS/Radxa `macos/.config/nvim` provides the same starter base.
+Keep keys identical across machines; platform-only specs guard themselves (`xtool.lua` Linux, `xcodebuild.lua` macOS).
 
 Symlinked file by file into `~/.config/nvim`, so Omarchy's directory (and `lua/plugins/theme.lua`, a
 symlink Omarchy rewrites) stays untouched.
@@ -105,7 +110,7 @@ symlink Omarchy rewrites) stays untouched.
 - `plugin/dotfiles.lua` loads `lua/dotfiles/keymaps.lua` on `VeryLazy` (after LazyVim registers its
   own) and, only if present, `dotfiles.overrides.{options,keymaps,autocmds}`.
 - `lua/plugins/*.lua` here are standalone additions. A spec that tunes a LazyVim plugin's `opts`
-  (lists append, tables deep-merge) is an override, so it lives in `omarchy-overrides/.config/nvim/lua/plugins/`.
+  (lists append, tables deep-merge) is an override, so it lives in `common-overrides/.config/nvim/lua/plugins/`.
 - Default keymaps may only use keys that are free in Neovim and LazyVim. Redefining a builtin key
   (`J`, `n`, `-`, `gi`, `gt`, arrows, ...) is an override.
 - Do not put a personal mapping on `<leader>` + `s d x f b q g c`: LazyVim uses those as menu prefixes.

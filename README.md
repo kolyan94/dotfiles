@@ -8,7 +8,7 @@ mirrors `$HOME`, and `./install.sh` stows the ones for the machine it runs on.
 | --- | --- | --- | --- |
 | `common/` | identical on every machine and on by default everywhere (Python shell helpers and Neovim venv/pytest setup, yazi `init.lua`/`keymap.toml`/`yazi.toml`, vim-be-good) | always | always |
 | `common-overrides/` | identical everywhere, but on Omarchy it changes a default (starship prompt, hardtime, bqf, precognition, vim-sleuth, visual-multi, json ftplugin) | always | `--with-overrides` |
-| `macos/` | the macOS setup: zinit `.zshrc`, kitty, tmux, mise, standalone (kickstart-style) Neovim with xcodebuild, yazi theme and plugins | always | - |
+| `macos/` | the macOS setup: zinit `.zshrc`, kitty, tmux, mise, LazyVim base (same as Omarchy) + xcodebuild, yazi theme and plugins | always | - |
 | `omarchy/` | the Omarchy overlay: additive shell layer, zsh via omarchy-zsh, LazyVim overlay, theme templates | - | always |
 | `shell-overrides/` | Omarchy opt-in shell layer: vi mode, `cp -i`/`rm -i`, `cat`->bat, `top`->btop, `vi`->nvim, fzf look | - | `--with-shell-overrides` or `--with-overrides` |
 | `omarchy-overrides/` | Omarchy opt-in layer: kitty/tmux tweaks, lazygit, LazyVim look and behavior | - | `--with-overrides` |
@@ -187,7 +187,7 @@ See [`omarchy/.config/nvim/SHORTCUTS.md`](omarchy/.config/nvim/SHORTCUTS.md).
 
 `macos/` is the original setup, unchanged: `.zshrc` with zinit (syntax highlighting, completions,
 autosuggestions, fzf-tab, zsh-vi-mode) and starship, kitty and tmux (tpm) configs, a mise
-`config.toml`, Tokyo Night colors throughout, and a standalone Neovim built from kickstart.nvim
+`config.toml`, Tokyo Night colors throughout, and LazyVim with the same personal layer as Omarchy (old kickstart config: tag `nvim-kickstart-final`)
 (telescope, toggleterm, xcodebuild.nvim, Xcode `sourcekit-lsp`). See `macos/.config/nvim/SHORTCUTS.md`.
 
 ## License
