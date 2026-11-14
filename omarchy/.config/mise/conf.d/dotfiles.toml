@@ -10,6 +10,19 @@ rclone = "latest"
 tlrc = "latest"
 yazi = "latest"
 
+# Terminal tools shared with the Macs (jq and lazydocker come from pacman on Omarchy)
+atuin = "latest"      # synced shell history; Ctrl+R only with --with-shell-overrides (server on rp5)
+delta = "latest"      # diff pager (jj uses it; git keeps Omarchy's pager)
+difftastic = "latest" # syntax-aware diffs
+gh = "latest"         # GitHub CLI (gh auth login once)
+yq = "latest"         # YAML/TOML/XML, jq syntax
+xh = "latest"         # HTTP requests for APIs
+dust = "latest"       # what takes the disk space
+watchexec = "latest"  # re-run a command when files change
+sd = "latest"         # find & replace
+jj = "latest"         # Jujutsu (trial): `jj git init --colocate` in a git repo
+jjui = "latest"       # TUI for jj
+
 # Embedded: Arduino CLI, and uv, which mise's pipx backend uses to install the
 # Python tools below into isolated venvs (no system pip, no python-pipx).
 arduino-cli = "latest"

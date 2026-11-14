@@ -28,4 +28,7 @@ zle-line-init() { _dotfiles_vi_cursor }
 zle -N zle-keymap-select
 zle -N zle-line-init
 
+# Atuin replaces fzf's Ctrl-R with shell history synced across machines (Up arrow stays as it is)
+command -v atuin &>/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
+
 [[ -r ~/.config/dotfiles/overrides.sh ]] && source ~/.config/dotfiles/overrides.sh
