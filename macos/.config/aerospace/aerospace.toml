@@ -1,4 +1,5 @@
-# AeroSpace: tiling windows on the Macs with Omarchy's (Hyprland's) keys.
+# AeroSpace on the Macs: workspaces with Omarchy's (Hyprland's) keys, NO tiling. Every window floats
+# (rule at the bottom), so Sill can move and resize windows freely; AeroSpace only switches workspaces.
 # Super = Caps Lock, which Vorssaint turns into Ctrl+Option+Cmd (Settings > Super key), so
 # Super+Shift stays a separate combination, as on Omarchy. Omarchy's Super+Alt / Super+Ctrl keys
 # have no Mac equivalent here (those modifiers are part of Super).
@@ -37,33 +38,27 @@ ctrl-alt-cmd-shift-n = 'exec-and-forget open -na kitty --args nvim'
 # --- Windows
 ctrl-alt-cmd-w = 'close'
 ctrl-alt-cmd-q = 'close'
-ctrl-alt-cmd-j = 'layout tiles horizontal vertical'   # toggle split direction
-ctrl-alt-cmd-t = 'layout floating tiling'             # float / tile
+ctrl-alt-cmd-t = 'layout floating tiling'             # tile this one window on demand / float it back
 ctrl-alt-cmd-f = 'fullscreen'
-ctrl-alt-cmd-l = 'layout tiles accordion'             # cycle workspace layout
 ctrl-alt-cmd-m = 'macos-native-minimize'
 ctrl-alt-cmd-left = 'focus left'
 ctrl-alt-cmd-right = 'focus right'
 ctrl-alt-cmd-up = 'focus up'
 ctrl-alt-cmd-down = 'focus down'
-ctrl-alt-cmd-shift-left = 'move left'                 # swap window
-ctrl-alt-cmd-shift-right = 'move right'
-ctrl-alt-cmd-shift-up = 'move up'
-ctrl-alt-cmd-shift-down = 'move down'
-ctrl-alt-cmd-minus = 'resize smart -50'
-ctrl-alt-cmd-equal = 'resize smart +50'
 
 # --- Workspaces 1-10 (Super+N switch, Super+Shift+N move the window there and follow it)
-ctrl-alt-cmd-1 = 'workspace 1'
-ctrl-alt-cmd-2 = 'workspace 2'
-ctrl-alt-cmd-3 = 'workspace 3'
-ctrl-alt-cmd-4 = 'workspace 4'
-ctrl-alt-cmd-5 = 'workspace 5'
-ctrl-alt-cmd-6 = 'workspace 6'
-ctrl-alt-cmd-7 = 'workspace 7'
-ctrl-alt-cmd-8 = 'workspace 8'
-ctrl-alt-cmd-9 = 'workspace 9'
-ctrl-alt-cmd-0 = 'workspace 10'
+# Two monitors: Super+N shows workspace N on the focused monitor only (summon-workspace). The other
+# monitor keeps what it shows; focus never jumps there. If N was showing there, it moves over here.
+ctrl-alt-cmd-1 = 'summon-workspace 1'
+ctrl-alt-cmd-2 = 'summon-workspace 2'
+ctrl-alt-cmd-3 = 'summon-workspace 3'
+ctrl-alt-cmd-4 = 'summon-workspace 4'
+ctrl-alt-cmd-5 = 'summon-workspace 5'
+ctrl-alt-cmd-6 = 'summon-workspace 6'
+ctrl-alt-cmd-7 = 'summon-workspace 7'
+ctrl-alt-cmd-8 = 'summon-workspace 8'
+ctrl-alt-cmd-9 = 'summon-workspace 9'
+ctrl-alt-cmd-0 = 'summon-workspace 10'
 ctrl-alt-cmd-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
 ctrl-alt-cmd-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
 ctrl-alt-cmd-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
@@ -77,17 +72,14 @@ ctrl-alt-cmd-shift-0 = 'move-node-to-workspace --focus-follows-window 10'
 ctrl-alt-cmd-tab = 'workspace next'
 ctrl-alt-cmd-shift-tab = 'workspace prev'
 
-# --- Monitors (Omarchy: Super+Shift+Ctrl+arrows; here Super+Shift+[ / ])
+# --- Monitors (Omarchy: Super+Shift+Ctrl+arrows; here Super+[ / ] focus, Super+Shift+[ / ] move window)
+ctrl-alt-cmd-leftSquareBracket = 'focus-monitor --wrap-around left'
+ctrl-alt-cmd-rightSquareBracket = 'focus-monitor --wrap-around right'
 ctrl-alt-cmd-shift-leftSquareBracket = 'move-node-to-monitor --focus-follows-window left'
 ctrl-alt-cmd-shift-rightSquareBracket = 'move-node-to-monitor --focus-follows-window right'
 
 ctrl-alt-cmd-shift-r = 'reload-config'
 
-# Dialogs and small utility windows float instead of tiling
+# Every window floats: no tiling, Sill owns window size and position
 [[on-window-detected]]
-if.app-id = 'com.apple.systempreferences'
-run = 'layout floating'
-
-[[on-window-detected]]
-if.app-id = 'com.vorssaint.utils'
 run = 'layout floating'

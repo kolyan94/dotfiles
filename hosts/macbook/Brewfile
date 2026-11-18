@@ -64,6 +64,6 @@ cask "vorssaint"
 cask "zoom"
 uv "platformio"
 
-# Tiling with Omarchy keys (config: macos/.config/aerospace) + Super on Caps Lock (Vorssaint)
+# Workspaces with Omarchy keys, windows float for Sill (config: macos/.config/aerospace) + Super on Caps Lock (Vorssaint)
 tap "nikitabobko/tap"
 cask "nikitabobko/tap/aerospace"
